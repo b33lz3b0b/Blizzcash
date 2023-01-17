@@ -1,21 +1,37 @@
 package com.example.blizzcash
 
-import androidx.appcompat.app.AppCompatActivity
+import com.example.blizzcash.R
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.compose.setContent
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.preference.PreferenceManager
+import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity: AppCompatActivity(){
+    val prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
+    val previouslyLogged = prefs.getString("R.string.user_name", "")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent{
-            MyFirstText()
+
+        if (previouslyLogged==""){
+            Welcome()
+        }
+        else{
+            MoveHome()
         }
     }
-}
 
-@Composable
-fun MyFirstText(){
-    Text(text = "hello world!")
+    fun MoveHome() {
+        // use an intent to travel from one activity to another.
+        val intent = Intent(this, HomeActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun Welcome() {
+        // use an intent to travel from one activity to another.
+        val intent = Intent(this, WelcomeActivity::class.java)
+        startActivity(intent)
+    }
+
 }

@@ -6,17 +6,16 @@ import androidx.activity.compose.setContent
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
-
-class WelcomeActivity: AppCompatActivity(){
+class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent{
-            WelcomeText()
+            MyFirstText()
         }
     }
 }
 
 @Composable
-fun WelcomeText(){
-    Text("Welcome to Blizzcash!")
+fun MyFirstText(){
+    Text(text = "hello world!")
 }
