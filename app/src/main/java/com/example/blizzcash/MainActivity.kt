@@ -1,37 +1,34 @@
 package com.example.blizzcash
 
 import com.example.blizzcash.R
-import android.content.Intent
 import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 
 
-class MainActivity: AppCompatActivity(){
-    val prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
-    val previouslyLogged = prefs.getString("R.string.user_name", "")
+class MainActivity: ComponentActivity(){
+
+    lateinit var navController: NavHostController
+    //var ExistentUser = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        if (previouslyLogged==""){
-            Welcome()
+        setContent{
+            navController = rememberNavController()
+            Navigation(navController = navController)
         }
-        else{
-            MoveHome()
-        }
-    }
-
-    fun MoveHome() {
-        // use an intent to travel from one activity to another.
-        val intent = Intent(this, HomeActivity::class.java)
-        startActivity(intent)
-    }
-
-    fun Welcome() {
-        // use an intent to travel from one activity to another.
-        val intent = Intent(this, WelcomeActivity::class.java)
-        startActivity(intent)
     }
 
 }
+
+/*@Composable
+fun VerifyUser(user: String){
+    if(user=="")
+        OptionScreen()
+}*/

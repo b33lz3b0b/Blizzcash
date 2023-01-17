@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -19,32 +18,39 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun WelcomeScreen(navController: NavHostController) {
+fun OptionsScreen(navController: NavHostController) {
     Column( modifier = Modifier
         .fillMaxHeight()
         .fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        WelcomeText()
+        SelectCourseText()
         Spacer(modifier = Modifier.height(20.dp))
-        WelcomeButton(navController)
+        SelectCourseButton("Allowance", navController)
+        Spacer(modifier = Modifier.height(20.dp))
+        SelectCourseButton("Salary", navController)
+        Spacer(modifier = Modifier.height(20.dp))
+        SelectCourseButton("Entrepreneur", navController)
     }
 }
 
 @Composable
-fun WelcomeButton(navController: NavController) {
-    Button(onClick={ navController.navigate(route = Screen.Options.route)},
-        colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray, contentColor = Color.LightGray)
-    ){
-        Text("Continue")
-    }
-}
-@Composable
-fun WelcomeText(){
+fun SelectCourseText(){
     androidx.compose.material3.Text(
-        "Welcome to Blizzcash!",
+        "Which course would you like to choose?",
         fontSize = 30.sp
     )
+}
+@Composable
+fun SelectCourseButton(course_type: String, navController: NavController){
+    Button(onClick= { navController.navigate(route = Screen.Profile.route)},
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.DarkGray,
+            contentColor = Color.LightGray
+        )
+    ){
+        Text("$course_type")
+    }
 }
 

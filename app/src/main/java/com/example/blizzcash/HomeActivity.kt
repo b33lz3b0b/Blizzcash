@@ -5,17 +5,10 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-
-class HomeActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent{
-            MyFirstText()
-        }
-    }
-}
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 
 @Composable
-fun MyFirstText(){
+fun HomeScreen(navController: NavHostController){
     Text(text = "hello world!")
 }
