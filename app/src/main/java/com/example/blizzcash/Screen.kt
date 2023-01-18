@@ -1,10 +1,11 @@
 package com.example.blizzcash
 
+const val KEY_NAME = "name"
+
 sealed class Screen(val route: String){
-    object Welcome: Screen("welcome_screen")
+    object Welcome: Screen("welcome_screen/{$KEY_NAME}")
     object Options: Screen("options_screen")
     object Profile: Screen("profile_screen")
     object Home: Screen("home_screen")
-    object Start: Screen("start_choice")
 }
 

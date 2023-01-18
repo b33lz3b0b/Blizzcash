@@ -1,8 +1,7 @@
 package com.example.blizzcash
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import androidx.activity.compose.setContent
+import android.content.Intent
+import com.example.blizzcash.R
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -15,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun OptionsScreen(navController: NavHostController) {
@@ -44,7 +43,9 @@ fun SelectCourseText(){
 }
 @Composable
 fun SelectCourseButton(course_type: String, navController: NavController){
-    Button(onClick= { navController.navigate(route = Screen.Profile.route)},
+    var chosen_course = Strings.chosen_course
+    Button(onClick= { //chosen_course.tag.replace(oldValue = chosen_course.tag, newValue = course_type)
+        navController.navigate(route = Screen.Profile.route)},
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.DarkGray,
             contentColor = Color.LightGray
