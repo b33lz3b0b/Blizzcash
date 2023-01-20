@@ -12,8 +12,11 @@ fun Navigation(navController: NavHostController){
 
     var cond = Strings.user_name
 
-    NavHost(navController = navController, startDestination = if(cond.tag=="") Screen.Welcome.route else Screen.Home.route ){
+    NavHost(navController = navController, startDestination = /*if(cond.tag=="") Screen.Welcome.route else Screen.Home.route*/ Screen.Welcome.route ){
         composable(route = Screen.Welcome.route){
+            WelcomeScreen(navController = navController)
+        }
+        composable(route = Screen.EmailSignUp.route){
             WelcomeScreen(navController = navController)
         }
         composable(route = Screen.Options.route){

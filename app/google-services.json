@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1075284896598",
+    "project_id": "blizzcash-3b088",
+    "storage_bucket": "blizzcash-3b088.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1075284896598:android:a5ccda6587e615535ec4f7",
+        "android_client_info": {
+          "package_name": "com.example.blizzcash"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1075284896598-3g101u7aoc7t2keevgs7mu05c9a51dss.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0BQm41ZR9MiJtQ-xozz-U9JiQSPWxh8w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1075284896598-3g101u7aoc7t2keevgs7mu05c9a51dss.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
