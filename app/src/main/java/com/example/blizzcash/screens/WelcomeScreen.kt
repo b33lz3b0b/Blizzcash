@@ -1,4 +1,4 @@
-package com.example.blizzcash
+package com.example.blizzcash.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.example.blizzcash.Screen
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase

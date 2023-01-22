@@ -1,4 +1,4 @@
-package com.example.blizzcash
+package com.example.blizzcash.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -9,10 +9,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.blizzcash.Screen
+import com.example.blizzcash.Strings
 
 @Composable
 fun ProfileScreen(navController: NavHostController){

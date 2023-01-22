@@ -1,7 +1,5 @@
-package com.example.blizzcash
+package com.example.blizzcash.screens
 
-import android.content.Intent
-import com.example.blizzcash.R
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -14,7 +12,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.compose.ui.res.stringResource
+import com.example.blizzcash.Screen
+import com.example.blizzcash.Strings
 
 @Composable
 fun OptionsScreen(navController: NavHostController) {

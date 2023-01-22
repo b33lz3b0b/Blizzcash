@@ -1,165 +1,217 @@
 package com.example.blizzcash.screens
 
-import android.app.AlertDialog
-import android.app.PendingIntent.getActivity
 import android.content.ContentValues
+import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material3.Card
+import androidx.compose.material.*
+import androidx.compose.material3.AlertDialog
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.getSelectedText
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
-import com.example.blizzcash.MainActivity
 import com.example.blizzcash.Screen
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 
+
 var auth: FirebaseAuth = Firebase.auth
+var database = FirebaseDatabase.getInstance()
+private var ref: DatabaseReference = database.getReference("users")
+var verif = 0
+
+
 
 @Composable
 fun SignUpScreen(navController: NavHostController) {
     // var focusManager = LocalFocusManager
-    val user = Firebase.auth.currentUser
     var email: TextFieldValue by remember { mutableStateOf(TextFieldValue("")) }
     var password: TextFieldValue by remember { mutableStateOf(TextFieldValue("")) }
     val contxt = LocalContext.current
+    val (showDialog, setShowDialog) =  remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
     Column( modifier = Modifier
         .fillMaxHeight()
-        .fillMaxWidth(),
+        .fillMaxWidth()
+        .pointerInput(Unit) {
+            detectTapGestures(onTap = {
+                focusManager.clearFocus()
+            })
+        },
         //.clickable { focusManager.clearFocus() },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        TextFieldEmail(email)
+        OutlinedTextField(
+            value = email,
+            label = { Text(text = "E-mail") },
+            placeholder = { Text(text = "Enter E-mail") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            onValueChange = {
+                email = it
+            },
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.clearFocus()
+                }
+            ),
+            maxLines = 1
+        )
         Spacer(modifier = Modifier.height(20.dp))
-        TextFieldPass(password)
+        OutlinedTextField(
+            value = password,
+            label = { Text(text = "Password") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            onValueChange = {
+                password = it
+            },
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.clearFocus()
+                }
+            ),
+            maxLines = 1,
+            visualTransformation = PasswordVisualTransformation()
+        )
         Spacer(modifier = Modifier.height(20.dp))
         Button(onClick ={
-                if(email.toString()=="" || password.toString()=="")
+                if(email==null || password==null){
+                    Log.d(ContentValues.TAG, "nothing")
                     Toast.makeText(contxt, "Please input email and password", Toast.LENGTH_SHORT).show()
-                else
-                    FinishSign(email,password,navController)
+                }
+                else{
+                    SignIn(email.getSelectedText().toString(),password.getSelectedText().toString(),navController)
+                    setShowDialog(true)
+                    Log.d(ContentValues.TAG, email.toString())
+                }
         }){
-            Text("Create profile")
+            Text("Next")
         }
+
     }
 }
 
-fun FinishSign(email: TextFieldValue, password: TextFieldValue, navController: NavHostController) {
-    val currentUser = auth.currentUser
+fun SignIn(email: String, password: String, navController: NavHostController) {
+    val query:Query = ref.orderByChild("email").equalTo(email.trim())
+    auth.signInWithEmailAndPassword(email, password)
+        .addOnCompleteListener() { task ->
+            if (task.isSuccessful) {
+                // Sign in success, update UI with the signed-in user's information
+                Log.d(ContentValues.TAG, "signInWithEmail:success")
+                val user = auth.currentUser
+                navController.navigate(route = Screen.Home.route)
+            } else {
+                // If sign in fails, display a message to the user.
+                Log.w(ContentValues.TAG, "signInWithEmail:failure", task.exception)
+                query.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        verif = if (dataSnapshot.exists()){
+                            Log.w(ContentValues.TAG, "EmailFound", task.exception)
+                            1
+                        } else{
+                            Log.w(ContentValues.TAG, "EmailNeedsToBeCreated", task.exception)
+                            2
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        throw error.toException();
+                    }
+                })
+                    //CustomAlertDialog()
+            }
+        }
+}
+
+fun SignUpInstead(email: TextFieldValue, password: TextFieldValue, navController: NavHostController, context: Context){
     auth.createUserWithEmailAndPassword(email.toString(), password.toString())
         .addOnCompleteListener() { task ->
             if (task.isSuccessful) {
                 // Sign in success, update UI with the signed-in user's information
                 Log.d(ContentValues.TAG, "createUserWithEmail:success")
                 val user = auth.currentUser
-                navController.navigate(route = Screen.Profile.route)
+
             } else {
                 // If sign in fails, display a message to the user.
                 Log.w(ContentValues.TAG, "createUserWithEmail:failure", task.exception)
-                if (currentUser != null) {
-                    // if(email.toString() == currentUser.email)
-                    // else
-                }
+                Toast.makeText(context, "There seems to be a problem. Please try again.", Toast.LENGTH_SHORT).show()
             }
         }
 }
 
 @Composable
-fun TextFieldEmail (email:TextFieldValue){
-    var aux = email
-    OutlinedTextField(
-        value = aux,
-        label = { Text(text = "E-mail") },
-        placeholder = { Text(text = "Enter E-mail") },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-        onValueChange = {
-            aux = it
-        },
-        maxLines = 1
-    )
-}
-
-@Composable
-fun TextFieldPass (password:TextFieldValue){
-    var aux = password
-    OutlinedTextField(
-        value = aux,
-        label = { Text(text = "Password") },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        onValueChange = {
-            aux = it
-        },
-        maxLines = 1
-    )
-}
-
-@Composable
-fun CustomAlertDialog(onDismiss: () -> Unit, onExit: () -> Unit, wrong_password:Boolean){
-    Dialog(onDismissRequest = { onDismiss() },
-        DialogProperties(
-            dismissOnBackPress = true, dismissOnClickOutside = true
-        )
-    ) {
-        Card(
-            shape = RoundedCornerShape(10.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        ) {
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .background(Color.White)
-            ) {
-                //if wrong password text + ok button
-                //else would u like to sign up , yes + no
-                Text(
-                    text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard",
-                    modifier = Modifier.padding(8.dp)
-                )
-
-                Row(Modifier.padding(top = 10.dp)) {
-                    OutlinedButton(
-                        onClick = { onDismiss() },
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                            .weight(1F)
-                    ) {
-                        Text(text = "Cancel")
-                    }
-
-
+fun DialogDemo(showDialog: Boolean, setShowDialog: (Boolean) -> Unit, type:Int, email: TextFieldValue, password: TextFieldValue, navController: NavHostController, context: Context) {
+    if(verif==1){
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = {
+                },
+                title = {
+                    Text("Wrong password")
+                },
+                confirmButton = {
                     Button(
-                        onClick = { onExit() },
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                            .weight(1F)
+                        onClick = {
+                            // Change the state to close the dialog
+                            setShowDialog(false)
+                        },
                     ) {
-                        Text(text = "Exit")
+                        Text("OK")
                     }
+                },
+                text = {
+                    Text("There is an account with this email, but the password seems to be incorrect. Please try again.")
                 }
-            }
+            )
         }
     }
+    else if(verif==2){
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = {
+                },
+                title = {
+                    Text("Nonexistent account")
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            SignUpInstead(email,password,navController,context)
+                            setShowDialog(false)
+                        },
+                    ) {
+                        Text("Yes")
+                    }
+                },
+                dismissButton = {
+                    Button(
+                        onClick = {
+                            // Change the state to close the dialog
+                            setShowDialog(false)
+                        },
+                    ) {
+                        Text("No")
+                    }
+                },
+                text = {
+                    Text("There isn't any existing account with this email. Would you like so sign up?")
+                }
+            )
+        }
+    }
+
 }

@@ -2,10 +2,10 @@ package com.example.blizzcash
 
 
 import androidx.compose.runtime.*
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.blizzcash.screens.*
 
 @Composable
 fun Navigation(navController: NavHostController){
@@ -17,7 +17,7 @@ fun Navigation(navController: NavHostController){
             WelcomeScreen(navController = navController)
         }
         composable(route = Screen.EmailSignUp.route){
-            WelcomeScreen(navController = navController)
+            SignUpScreen(navController = navController)
         }
         composable(route = Screen.Options.route){
             OptionsScreen(navController = navController)
