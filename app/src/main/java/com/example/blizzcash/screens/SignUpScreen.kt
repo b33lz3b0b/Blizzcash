@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
@@ -89,19 +90,19 @@ fun SignUpScreen(navController: NavHostController) {
         )
         Spacer(modifier = Modifier.height(20.dp))
         Button(onClick ={
-                if(email==null || password==null){
+                if((email.composition== TextRange(0,0) && email.composition==null) || (password.selection== TextRange(0,0) && password.composition==null)){
                     Log.d(ContentValues.TAG, "nothing")
                     Toast.makeText(contxt, "Please input email and password", Toast.LENGTH_SHORT).show()
                 }
                 else{
-                    SignIn(email.getSelectedText().toString(),password.getSelectedText().toString(),navController)
+                    SignIn(email.text,password.text,navController)
                     setShowDialog(true)
                     Log.d(ContentValues.TAG, email.toString())
                 }
         }){
             Text("Next")
         }
-
+        DialogDemo(showDialog,setShowDialog,verif,email.text,password.text,navController,contxt)
     }
 }
 
@@ -137,7 +138,7 @@ fun SignIn(email: String, password: String, navController: NavHostController) {
         }
 }
 
-fun SignUpInstead(email: TextFieldValue, password: TextFieldValue, navController: NavHostController, context: Context){
+fun SignUpInstead(email: String, password: String, navController: NavHostController, context: Context){
     auth.createUserWithEmailAndPassword(email.toString(), password.toString())
         .addOnCompleteListener() { task ->
             if (task.isSuccessful) {
@@ -154,7 +155,7 @@ fun SignUpInstead(email: TextFieldValue, password: TextFieldValue, navController
 }
 
 @Composable
-fun DialogDemo(showDialog: Boolean, setShowDialog: (Boolean) -> Unit, type:Int, email: TextFieldValue, password: TextFieldValue, navController: NavHostController, context: Context) {
+fun DialogDemo(showDialog: Boolean, setShowDialog: (Boolean) -> Unit, type:Int, email: String, password: String, navController: NavHostController, context: Context) {
     if(verif==1){
         if (showDialog) {
             AlertDialog(
