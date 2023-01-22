@@ -1,9 +1,11 @@
 package com.example.blizzcash.screens
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.NonNull
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
@@ -13,6 +15,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -24,6 +27,7 @@ import androidx.compose.ui.text.input.getSelectedText
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.blizzcash.Screen
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
@@ -43,7 +47,7 @@ fun SignUpScreen(navController: NavHostController) {
     var email: TextFieldValue by remember { mutableStateOf(TextFieldValue("")) }
     var password: TextFieldValue by remember { mutableStateOf(TextFieldValue("")) }
     val contxt = LocalContext.current
-    val (showDialog, setShowDialog) =  remember { mutableStateOf(false) }
+    var showDialog: Boolean by  remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     Column( modifier = Modifier
         .fillMaxHeight()
@@ -91,108 +95,125 @@ fun SignUpScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.height(20.dp))
         Button(onClick ={
                 if((email.composition== TextRange(0,0) && email.composition==null) || (password.selection== TextRange(0,0) && password.composition==null)){
-                    Log.d(ContentValues.TAG, "nothing")
+                    Log.d(TAG, "nothing")
                     Toast.makeText(contxt, "Please input email and password", Toast.LENGTH_SHORT).show()
                 }
                 else{
                     SignIn(email.text,password.text,navController)
-                    setShowDialog(true)
-                    Log.d(ContentValues.TAG, email.toString())
+                    if(verif!=0) showDialog=true
+                    Log.d(TAG, email.toString())
                 }
         }){
-            Text("Next")
+            if(showDialog)
+                DialogDemo(showDialog,onDismiss = {showDialog = false},verif,email.text,password.text,navController,contxt)
+            Surface {
+                Text("Next")
+            }
         }
-        DialogDemo(showDialog,setShowDialog,verif,email.text,password.text,navController,contxt)
+
     }
 }
 
 fun SignIn(email: String, password: String, navController: NavHostController) {
     val query:Query = ref.orderByChild("email").equalTo(email.trim())
     auth.signInWithEmailAndPassword(email, password)
-        .addOnCompleteListener() { task ->
+        .addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 // Sign in success, update UI with the signed-in user's information
-                Log.d(ContentValues.TAG, "signInWithEmail:success")
+                Log.d(TAG, "signInWithEmail:success")
                 val user = auth.currentUser
-                navController.navigate(route = Screen.Home.route)
+                if(user?.isEmailVerified!!)
+                        navController.navigate(route = Screen.Home.route)
+                else{
+                    user.sendEmailVerification()
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Log.d(TAG, "Email sent.")
+                            }
+                        }
+                    user.reload()
+                    navController.navigate(route = Screen.Home.route)
+                }
             } else {
                 // If sign in fails, display a message to the user.
-                Log.w(ContentValues.TAG, "signInWithEmail:failure", task.exception)
+                Log.w(TAG, "signInWithEmail:failure", task.exception)
                 query.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         verif = if (dataSnapshot.exists()){
-                            Log.w(ContentValues.TAG, "EmailFound", task.exception)
+                            Log.w(TAG, "EmailFound", task.exception)
                             1
                         } else{
-                            Log.w(ContentValues.TAG, "EmailNeedsToBeCreated", task.exception)
+                            Log.w(TAG, "EmailNeedsToBeCreated", task.exception)
                             2
                         }
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        throw error.toException();
+                        throw error.toException()
                     }
                 })
-                    //CustomAlertDialog()
             }
         }
 }
 
 fun SignUpInstead(email: String, password: String, navController: NavHostController, context: Context){
-    auth.createUserWithEmailAndPassword(email.toString(), password.toString())
-        .addOnCompleteListener() { task ->
+    auth.createUserWithEmailAndPassword(email, password)
+        .addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 // Sign in success, update UI with the signed-in user's information
-                Log.d(ContentValues.TAG, "createUserWithEmail:success")
+                Log.d(TAG, "createUserWithEmail:success")
                 val user = auth.currentUser
-
+                user!!.sendEmailVerification()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Log.d(TAG, "Email sent.")
+                        }
+                    }
+                user.reload()
+                navController.navigate(route = Screen.Profile.route)
             } else {
                 // If sign in fails, display a message to the user.
-                Log.w(ContentValues.TAG, "createUserWithEmail:failure", task.exception)
+                Log.w(TAG, "createUserWithEmail:failure", task.exception)
                 Toast.makeText(context, "There seems to be a problem. Please try again.", Toast.LENGTH_SHORT).show()
             }
         }
 }
 
 @Composable
-fun DialogDemo(showDialog: Boolean, setShowDialog: (Boolean) -> Unit, type:Int, email: String, password: String, navController: NavHostController, context: Context) {
-    if(verif==1){
-        if (showDialog) {
+fun DialogDemo(showDialog: Boolean, onDismiss: () -> Unit, type:Int, email: String, password: String, navController: NavHostController, context: Context) {
+    if(showDialog) {
+        if (verif == 1) {
             AlertDialog(
-                onDismissRequest = {
-                },
+                onDismissRequest = { onDismiss() },
                 title = {
-                    Text("Wrong password")
+                    Text("Wrong password", color = Color.Black)
                 },
                 confirmButton = {
                     Button(
                         onClick = {
                             // Change the state to close the dialog
-                            setShowDialog(false)
+                            onDismiss()
                         },
                     ) {
                         Text("OK")
                     }
                 },
                 text = {
-                    Text("There is an account with this email, but the password seems to be incorrect. Please try again.")
+                    Text("There is an account with this email, but the password seems to be incorrect. Please try again.", color = Color.Black)
                 }
             )
-        }
-    }
-    else if(verif==2){
-        if (showDialog) {
+        } else if (verif == 2) {
             AlertDialog(
-                onDismissRequest = {
-                },
+                onDismissRequest = {onDismiss()},
                 title = {
-                    Text("Nonexistent account")
+                    Text("Nonexistent account", color = Color.Black)
                 },
                 confirmButton = {
                     Button(
                         onClick = {
-                            SignUpInstead(email,password,navController,context)
-                            setShowDialog(false)
+                            SignUpInstead(email, password, navController, context)
+
+                            onDismiss()
                         },
                     ) {
                         Text("Yes")
@@ -202,17 +223,16 @@ fun DialogDemo(showDialog: Boolean, setShowDialog: (Boolean) -> Unit, type:Int, 
                     Button(
                         onClick = {
                             // Change the state to close the dialog
-                            setShowDialog(false)
+                            onDismiss()
                         },
                     ) {
                         Text("No")
                     }
                 },
                 text = {
-                    Text("There isn't any existing account with this email. Would you like so sign up?")
+                    Text("There isn't any existing account with this email. Would you like so sign up?", color = Color.Black)
                 }
             )
         }
     }
-
 }

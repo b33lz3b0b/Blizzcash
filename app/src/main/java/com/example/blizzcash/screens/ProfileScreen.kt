@@ -14,10 +14,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.blizzcash.Screen
 import com.example.blizzcash.Strings
+import com.google.firebase.database.FirebaseDatabase
 
 @Composable
 fun ProfileScreen(navController: NavHostController){
-    var username = Strings.user_name
    // var focusManager = LocalFocusManager
 
     Column( modifier = Modifier
@@ -42,7 +42,8 @@ fun ProfileScreen(navController: NavHostController){
             maxLines = 1
         )
         Spacer(modifier = Modifier.height(20.dp))
-        Button(onClick ={//username.tag.replace(oldValue = username.tag, newValue = text.toString())
+        Button(onClick ={
+            val user = auth.currentUser
             navController.navigate(route = Screen.Home.route)
         }){
             Text("Create profile")
