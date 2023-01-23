@@ -28,7 +28,7 @@ fun WelcomeScreen(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         if (user != null) {
-            WelcomeText("Welcome back, " + user.displayName.toString())
+            WelcomeText("Welcome back, " + database.getReference("users").child(user.uid).child("username"))
             Spacer(modifier = Modifier.height(20.dp))
             WelcomeButton(navController, "Continue")
         } else {
@@ -41,12 +41,12 @@ fun WelcomeScreen(navController: NavHostController) {
 
 @Composable
 fun WelcomeButton(navController: NavController, next:String) {
-    Button(onClick={ navController.navigate(route = Screen.Options.route)
+    Button(onClick={
         val user = Firebase.auth.currentUser
         if (user != null) {
-            navController.navigate(route = Screen.Home.route)
+            navController.navigate(route = "home")
         } else {
-            navController.navigate(route = Screen.EmailSignUp.route)
+            navController.navigate(route = "signup")
         } },
         colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray, contentColor = Color.LightGray)
     ){

@@ -39,5 +39,6 @@ class MainActivity: ComponentActivity(){
         ){}
         pushNotificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
         pushNotificationPermissionLauncher.launch(android.Manifest.permission.ACCESS_NETWORK_STATE)
+
     }
 }

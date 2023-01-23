@@ -1,5 +1,7 @@
 package com.example.blizzcash.screens
 
+import android.content.ContentValues
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -12,8 +14,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.example.blizzcash.Information2
+import com.example.blizzcash.Information3
 import com.example.blizzcash.Screen
 import com.example.blizzcash.Strings
+import com.google.firebase.database.DatabaseReference
+
+private var ref: DatabaseReference = database.getReference("users").child(auth.currentUser!!.uid)
 
 @Composable
 fun OptionsScreen(navController: NavHostController) {
@@ -42,15 +49,42 @@ fun SelectCourseText(){
 }
 @Composable
 fun SelectCourseButton(course_type: String, navController: NavController){
-    var chosen_course = Strings.chosen_course
-    Button(onClick= { //chosen_course.tag.replace(oldValue = chosen_course.tag, newValue = course_type)
+    Button(onClick= {
+        val information = Information3(course = course_type,level = 1, lesson = 1)
+
         navController.navigate(route = Screen.Profile.route)},
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.DarkGray,
             contentColor = Color.LightGray
         )
     ){
-        Text("$course_type")
+        Text(course_type)
     }
 }
 
+fun changeInfo(information: Information3){
+    ref.child("course").setValue(information.course).addOnCompleteListener(){task ->
+        if(task.isSuccessful){
+            Log.d(ContentValues.TAG, "node is completed")
+        }
+        else{
+            Log.d(ContentValues.TAG, "node has FAILED")
+        }
+    }
+    ref.child("level").setValue(information.level).addOnCompleteListener(){task ->
+        if(task.isSuccessful){
+            Log.d(ContentValues.TAG, "node is completed")
+        }
+        else{
+            Log.d(ContentValues.TAG, "node has FAILED")
+        }
+    }
+    ref.child("lesson").setValue(information.level).addOnCompleteListener(){task ->
+        if(task.isSuccessful){
+            Log.d(ContentValues.TAG, "node is completed")
+        }
+        else{
+            Log.d(ContentValues.TAG, "node has FAILED")
+        }
+    }
+}
