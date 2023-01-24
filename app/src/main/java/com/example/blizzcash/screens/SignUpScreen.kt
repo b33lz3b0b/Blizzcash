@@ -39,7 +39,6 @@ var verif = mutableStateOf(0)
 
 @Composable
 fun SignUpScreen(navController: NavHostController) {
-    // var focusManager = LocalFocusManager
     var email: TextFieldValue by remember { mutableStateOf(TextFieldValue("")) }
     var password: TextFieldValue by remember { mutableStateOf(TextFieldValue("")) }
     val contxt = LocalContext.current
@@ -53,7 +52,6 @@ fun SignUpScreen(navController: NavHostController) {
                 focusManager.clearFocus()
             })
         },
-        //.clickable { focusManager.clearFocus() },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){

@@ -3,14 +3,18 @@ package com.example.blizzcash.screens
 import android.content.ContentValues
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -27,12 +31,14 @@ private var ref: DatabaseReference = database.getReference("users").child(auth.c
 
 @Composable
 fun ProfileScreen(navController: NavHostController){
-   // var focusManager = LocalFocusManager
-
+    val focusManager = LocalFocusManager.current
     Column( modifier = Modifier
         .fillMaxHeight()
-        .fillMaxWidth(),
-        //.clickable { focusManager.clearFocus() },
+        .fillMaxWidth()
+        .pointerInput(Unit) {
+        detectTapGestures(onTap = {
+            focusManager.clearFocus()
+        })},
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
@@ -48,6 +54,11 @@ fun ProfileScreen(navController: NavHostController){
                 else
                    Toast.makeText(contxt, "Can't input more than 20 characters", Toast.LENGTH_SHORT).show()
             },
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.clearFocus()
+                }
+            ),
             maxLines = 1
         )
         Spacer(modifier = Modifier.height(20.dp))
