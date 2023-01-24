@@ -51,8 +51,10 @@ fun SelectCourseText(){
 fun SelectCourseButton(course_type: String, navController: NavController){
     Button(onClick= {
         val information = Information3(course = course_type,level = 1, lesson = 1)
-
-        navController.navigate(route = Screen.Home.route)},
+        changeInfo(information)
+        navController.navigate(route = Screen.Home.route){
+            popUpTo(Screen.Options.route) {inclusive = true}
+        }},
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.DarkGray,
             contentColor = Color.LightGray
@@ -79,7 +81,7 @@ fun changeInfo(information: Information3){
             Log.d(ContentValues.TAG, "node has FAILED")
         }
     }
-    ref.child("lesson").setValue(information.level).addOnCompleteListener(){task ->
+    ref.child("lesson").setValue(information.lesson).addOnCompleteListener(){task ->
         if(task.isSuccessful){
             Log.d(ContentValues.TAG, "node is completed")
         }

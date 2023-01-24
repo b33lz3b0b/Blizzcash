@@ -13,13 +13,18 @@ import androidx.navigation.NavHostController
 import com.example.blizzcash.Strings
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+
 
 
 @Composable
 fun HomeScreen(navController: NavHostController){
+    val user = auth.currentUser
+    var ref: DatabaseReference = database.getReference("users").child(user!!.uid)
     Column(modifier=Modifier.fillMaxWidth()){
-        Text(text = "hello" + Strings.user_name.tag)
+        Text(text = "hello")
         Spacer(modifier = Modifier.height(20.dp))
         Button(onClick={
             var auth: FirebaseAuth = Firebase.auth

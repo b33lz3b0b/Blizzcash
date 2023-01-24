@@ -62,7 +62,11 @@ fun ProfileScreen(navController: NavHostController){
                 changeInfo(information)
                 Log.d(ContentValues.TAG, name.toString())
             }
-            navController.navigate(route = Screen.Options.route)
+            navController.navigate(route = Screen.Options.route){
+                popUpTo(Screen.Profile.route){
+                    inclusive = true
+                }
+            }
         }){
             Text("Create profile")
         }

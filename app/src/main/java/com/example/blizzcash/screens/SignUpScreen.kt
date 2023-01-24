@@ -111,7 +111,9 @@ fun SignIn(email: String, password: String, navController: NavHostController) {
                             }
                         }
                     user.reload()
-                    navController.navigate(route = Screen.Home.route)
+                    navController.navigate(route = Screen.Home.route){
+                        popUpTo(Screen.Welcome.route){inclusive = true}
+                    }
                 }
             } else {
                 // If sign in fails, display a message to the user.
@@ -169,7 +171,9 @@ fun SignUpInstead(email: String, password: String, navController: NavHostControl
                 val information = Information1(email = email, password = password)
                 changeInfo(information)
                 user.reload()
-                navController.navigate(route = Screen.Profile.route)
+                navController.navigate(route = Screen.Profile.route){
+                    popUpTo(Screen.EmailSignUp.route){inclusive = true}
+                }
             } else {
                 // If sign in fails, display a message to the user.
                 Log.w(TAG, "createUserWithEmail:failure", task.exception)

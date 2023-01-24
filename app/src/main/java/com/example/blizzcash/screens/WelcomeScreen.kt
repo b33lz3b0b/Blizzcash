@@ -15,7 +15,10 @@ import androidx.navigation.NavHostController
 import com.example.blizzcash.Screen
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.ktx.Firebase
+
+lateinit var username : String
 
 @Composable
 fun WelcomeScreen(navController: NavHostController) {
@@ -28,7 +31,8 @@ fun WelcomeScreen(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         if (user != null) {
-            WelcomeText("Welcome back, " + database.getReference("users").child(user.uid).child("username"))
+            var ref: DatabaseReference = database.getReference("users").child(user!!.uid)
+            WelcomeText("Welcome back, " + ref.child("username").get())
             Spacer(modifier = Modifier.height(20.dp))
             WelcomeButton(navController, "Continue")
         } else {

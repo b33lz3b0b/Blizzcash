@@ -1,6 +1,6 @@
 package com.example.blizzcash
 
-const val KEY_NAME = "name"
+//const val KEY_NAME = "name"
 
 sealed class Screen(val route: String){
     object Welcome: Screen("welcome_screen")
