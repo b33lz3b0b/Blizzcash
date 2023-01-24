@@ -29,12 +29,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
+import kotlin.math.absoluteValue
 
 
 var auth: FirebaseAuth = Firebase.auth
 var database = FirebaseDatabase.getInstance()
 private var ref: DatabaseReference = database.getReference("users")
-var verif = 0
+var verif = mutableStateOf(0)
 
 @Composable
 fun SignUpScreen(navController: NavHostController) {
@@ -119,11 +120,11 @@ fun SignIn(email: String, password: String, navController: NavHostController) {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         if (dataSnapshot.exists()){
                             Log.w(TAG, "EmailFound", task.exception)
-                            verif = 1
+                            verif.value = 1
                             //Log.d(TAG, verif.toString())
                         } else{
                             Log.w(TAG, "EmailNeedsToBeCreated", task.exception)
-                            verif = 2
+                            verif.value = 2
                             //Log.d(TAG, verif.toString())
                         }
                     }
@@ -134,6 +135,10 @@ fun SignIn(email: String, password: String, navController: NavHostController) {
                 })
             }
         }
+}
+
+fun verify(ok:Int):Int{
+    return ok
 }
 
 fun changeInfo(information:Information1){
@@ -174,67 +179,62 @@ fun SignUpInstead(email: String, password: String, navController: NavHostControl
 }
 
 @Composable
-fun DialogDemo(showDialog: Boolean, onDismiss: () -> Unit, type:Int, email: String, password: String, navController: NavHostController, context: Context) {
-    if(showDialog) {
-        if (verif == 1) {
-            AlertDialog(
-                onDismissRequest = { onDismiss() },
-                title = {
-                    Text("Wrong password", color = Color.Black)
-                },
-                confirmButton = {
-                    Button(
-                        onClick = {
-                            verif = 0
-                            onDismiss()
-                        },
-                    ) {
-                        Text("OK")
-                    }
-                },
-                text = {
-                    Text("There is an account with this email, but the password seems to be incorrect. Please try again.", color = Color.Black)
+fun DialogDemo(onDismiss: () -> Unit, email: String, password: String, navController: NavHostController, context: Context) {
+    if (verif.value == 1) {
+        AlertDialog(
+            onDismissRequest = { onDismiss() },
+            title = {
+                Text("Wrong password", color = Color.Black)
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        onDismiss()
+                    },
+                ) {
+                    Text("OK")
                 }
-            )
-        }
-        else if (verif == 2) {
-            AlertDialog(
-                onDismissRequest = {onDismiss()},
-                title = {
-                    Text("Nonexistent account", color = Color.Black)
-                },
-                confirmButton = {
-                    Button(
-                        onClick = {
-                            verif = 0
-                            SignUpInstead(email, password, navController, context)
-                            onDismiss()
-                        },
-                    ) {
-                        Text("Yes")
-                    }
-                },
-                dismissButton = {
-                    Button(
-                        onClick = {
-                            verif = 0
-                            onDismiss()
-                        },
-                    ) {
-                        Text("No")
-                    }
-                },
-                text = {
-                    Text("There isn't any existing account with this email. Would you like so sign up?", color = Color.Black)
+            },
+            text = {
+                Text("There is an account with this email, but the password seems to be incorrect. Please try again.", color = Color.Black)
+            }
+        )
+    }
+    else if (verif.value == 2) {
+        AlertDialog(
+            onDismissRequest = {onDismiss()},
+            title = {
+                Text("Nonexistent account", color = Color.Black)
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        SignUpInstead(email, password, navController, context)
+                        onDismiss()
+                    },
+                ) {
+                    Text("Yes")
                 }
-            )
-        }
+            },
+            dismissButton = {
+                Button(
+                    onClick = {
+                        onDismiss()
+                    },
+                ) {
+                    Text("No")
+                }
+            },
+            text = {
+                Text("There isn't any existing account with this email. Would you like so sign up?", color = Color.Black)
+            }
+        )
     }
 }
 
 @Composable
 fun NextButton(email:TextFieldValue, password:TextFieldValue, navController: NavHostController,context: Context){
-    var ok: Int by remember { mutableStateOf(verif) }
+    var ok: Int by remember { mutableStateOf(0) }
     var showDialog: Boolean by  remember { mutableStateOf(false) }
     TextButton(onClick ={
         if((email.selection== TextRange(0,0) && email.composition==null) || (password.selection== TextRange(0,0) && password.composition==null)){
@@ -243,17 +243,13 @@ fun NextButton(email:TextFieldValue, password:TextFieldValue, navController: Nav
         }
         else{
             SignIn(email.text,password.text,navController)
-            ok=verif
-            if(ok!=0)
-                showDialog = true
-            Log.d(TAG, ok.toString())
         }
     }){
-
+        if(verif.value!=0)
+            DialogDemo(onDismiss = {verif.value=0},email.text,password.text,navController,context)
         Surface {
             Text("Next")
         }
     }
-    DialogDemo(showDialog,onDismiss = {showDialog = false},ok,email.text,password.text,navController,context)
 }
 

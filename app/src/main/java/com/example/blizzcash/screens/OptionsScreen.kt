@@ -52,7 +52,7 @@ fun SelectCourseButton(course_type: String, navController: NavController){
     Button(onClick= {
         val information = Information3(course = course_type,level = 1, lesson = 1)
 
-        navController.navigate(route = Screen.Profile.route)},
+        navController.navigate(route = Screen.Home.route)},
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.DarkGray,
             contentColor = Color.LightGray
