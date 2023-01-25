@@ -14,10 +14,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.example.blizzcash.Information2
 import com.example.blizzcash.Information3
 import com.example.blizzcash.Screen
-import com.example.blizzcash.Strings
 import com.google.firebase.database.DatabaseReference
 
 private var ref: DatabaseReference = database.getReference("users").child(auth.currentUser!!.uid)

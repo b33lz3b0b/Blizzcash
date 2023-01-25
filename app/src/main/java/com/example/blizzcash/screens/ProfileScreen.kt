@@ -19,10 +19,8 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.blizzcash.Information1
 import com.example.blizzcash.Information2
 import com.example.blizzcash.Screen
-import com.example.blizzcash.Strings
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlin.random.Random
