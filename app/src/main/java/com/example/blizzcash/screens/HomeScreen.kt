@@ -12,6 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.blizzcash.theme.MainAppTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
@@ -26,29 +27,31 @@ private var quotes: Array<String> = arrayOf("wtf","wdym","bruh")
 
 @Composable
 fun HomeScreen(navController: NavHostController){
-    Column(modifier=Modifier.fillMaxWidth()
-        .fillMaxHeight()){
-        Box(modifier=Modifier.fillMaxWidth()){
-            TextButton(onClick = { /*TODO*/ },
-                        modifier = Modifier
-                            .align(Alignment.TopStart)) {
-                Text(text = "settings")
+    MainAppTheme(){
+        Column(modifier=Modifier.fillMaxWidth()
+            .fillMaxHeight()){
+            Box(modifier=Modifier.fillMaxWidth()){
+                TextButton(onClick = { /*TODO*/ },
+                    modifier = Modifier
+                        .align(Alignment.TopStart)) {
+                    Text(text = "settings")
+                }
             }
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Column(modifier=Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally){
-            Text(text = "hello,")
-            Text(text = "username")
-            Text(text = quotes[Random.nextInt(0,2)])
-        }
+            Spacer(modifier = Modifier.height(20.dp))
+            Column(modifier=Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally){
+                Text(text = "hello,")
+                Text(text = "username")
+                Text(text = quotes[Random.nextInt(0,2)])
+            }
 
-        Spacer(modifier = Modifier.height(80.dp))
+            Spacer(modifier = Modifier.height(80.dp))
 
-        Button(onClick={
-            //auth.signOut()
-        }){
-            Text(text="Sign out")
+            Button(onClick={
+                //auth.signOut()
+            }){
+                Text(text="Sign out")
+            }
         }
     }
 }

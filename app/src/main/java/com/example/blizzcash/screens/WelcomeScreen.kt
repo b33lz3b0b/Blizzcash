@@ -13,34 +13,41 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.blizzcash.Screen
+import com.example.blizzcash.theme.MainAppTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 
-lateinit var username : String
+/*private var auth: FirebaseAuth = Firebase.auth
+private var database = FirebaseDatabase.getInstance()
+lateinit var username : String*/
 
 @Composable
 fun WelcomeScreen(navController: NavHostController) {
     var auth: FirebaseAuth = Firebase.auth
     val user = Firebase.auth.currentUser
-    Column( modifier = Modifier
-        .fillMaxHeight()
-        .fillMaxWidth(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        if (user != null) {
-            var ref: DatabaseReference = database.getReference("users").child(user!!.uid)
-            WelcomeText("Welcome back, " + ref.child("username").get())
-            Spacer(modifier = Modifier.height(20.dp))
-            WelcomeButton(navController, "Continue")
-        } else {
-            WelcomeText("Welcome to Blizzcash!")
-            Spacer(modifier = Modifier.height(20.dp))
-            WelcomeButton(navController, "Sign Up/Log In")
+    MainAppTheme() {
+        Column( modifier = Modifier
+            .fillMaxHeight()
+            .fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            if (user != null) {
+                //var ref: DatabaseReference = database.getReference("users").child(user!!.uid)
+                WelcomeText("Welcome back, ")
+                Spacer(modifier = Modifier.height(20.dp))
+                WelcomeButton(navController, "Continue")
+            } else {
+                WelcomeText("Welcome to Blizzcash!")
+                Spacer(modifier = Modifier.height(20.dp))
+                WelcomeButton(navController, "Sign Up/Log In")
+            }
         }
     }
+
 }
 
 @Composable
@@ -59,7 +66,7 @@ fun WelcomeButton(navController: NavController, next:String) {
 }
 @Composable
 fun WelcomeText(greeting:String){
-    androidx.compose.material3.Text(
+    Text(
         greeting,
         fontSize = 30.sp
     )

@@ -16,26 +16,36 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.blizzcash.Information3
 import com.example.blizzcash.Screen
+import com.example.blizzcash.theme.MainAppTheme
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
 
-private var ref: DatabaseReference = database.getReference("users").child(auth.currentUser!!.uid)
+/*private var auth: FirebaseAuth = Firebase.auth
+private var database = FirebaseDatabase.getInstance()
+private var ref: DatabaseReference = database.getReference("users").child(auth.currentUser!!.uid)*/
 
 @Composable
 fun OptionsScreen(navController: NavHostController) {
-    Column( modifier = Modifier
-        .fillMaxHeight()
-        .fillMaxWidth(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        SelectCourseText()
-        Spacer(modifier = Modifier.height(20.dp))
-        SelectCourseButton("Allowance", navController)
-        Spacer(modifier = Modifier.height(20.dp))
-        SelectCourseButton("Salary", navController)
-        Spacer(modifier = Modifier.height(20.dp))
-        SelectCourseButton("Entrepreneur", navController)
+    MainAppTheme() {
+        Column( modifier = Modifier
+            .fillMaxHeight()
+            .fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            SelectCourseText()
+            Spacer(modifier = Modifier.height(20.dp))
+            SelectCourseButton("Allowance", navController)
+            Spacer(modifier = Modifier.height(20.dp))
+            SelectCourseButton("Salary", navController)
+            Spacer(modifier = Modifier.height(20.dp))
+            SelectCourseButton("Entrepreneur", navController)
+        }
     }
+
 }
 
 @Composable
@@ -49,7 +59,7 @@ fun SelectCourseText(){
 fun SelectCourseButton(course_type: String, navController: NavController){
     Button(onClick= {
         val information = Information3(course = course_type,level = 1, lesson = 1)
-        changeInfo(information)
+        //changeInfo(information)
         navController.navigate(route = Screen.Home.route){
             popUpTo(Screen.Options.route) {inclusive = true}
         }},
@@ -62,7 +72,7 @@ fun SelectCourseButton(course_type: String, navController: NavController){
     }
 }
 
-fun changeInfo(information: Information3){
+/*fun changeInfo(information: Information3){
     ref.child("course").setValue(information.course).addOnCompleteListener(){task ->
         if(task.isSuccessful){
             Log.d(ContentValues.TAG, "node is completed")
@@ -87,4 +97,4 @@ fun changeInfo(information: Information3){
             Log.d(ContentValues.TAG, "node has FAILED")
         }
     }
-}
+}*/
