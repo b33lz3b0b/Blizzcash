@@ -4,12 +4,14 @@ import android.content.ContentValues.TAG
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.blizzcash.Information1
 import com.example.blizzcash.Screen
+import com.example.blizzcash.theme.MainAppTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
@@ -32,10 +35,10 @@ import com.google.firebase.ktx.Firebase
 import kotlin.math.absoluteValue
 
 
-var auth: FirebaseAuth = Firebase.auth
-var database = FirebaseDatabase.getInstance()
-private var ref: DatabaseReference = database.getReference("users")
-var verif = mutableStateOf(0)
+/*private var auth: FirebaseAuth = Firebase.auth
+private var database = FirebaseDatabase.getInstance()
+private var ref: DatabaseReference = database.getReference("users")*/
+private var verif = mutableStateOf(0)
 
 @Composable
 fun SignUpScreen(navController: NavHostController) {
@@ -43,55 +46,84 @@ fun SignUpScreen(navController: NavHostController) {
     var password: TextFieldValue by remember { mutableStateOf(TextFieldValue("")) }
     val contxt = LocalContext.current
     val focusManager = LocalFocusManager.current
-
-    Column( modifier = Modifier
-        .fillMaxHeight()
-        .fillMaxWidth()
-        .pointerInput(Unit) {
-            detectTapGestures(onTap = {
-                focusManager.clearFocus()
-            })
-        },
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        OutlinedTextField(
-            value = email,
-            label = { Text(text = "E-mail") },
-            placeholder = { Text(text = "Enter E-mail") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            onValueChange = {
-                email = it
-            },
-            keyboardActions = KeyboardActions(
-                onDone = {
+    MainAppTheme() {
+        Column( modifier = Modifier
+            .fillMaxHeight()
+            .fillMaxWidth()
+            .pointerInput(Unit) {
+                detectTapGestures(onTap = {
                     focusManager.clearFocus()
-                }
-            ),
-            maxLines = 1
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        OutlinedTextField(
-            value = password,
-            label = { Text(text = "Password") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            onValueChange = {
-                password = it
-            },
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    focusManager.clearFocus()
-                }
-            ),
-            maxLines = 1,
-            visualTransformation = PasswordVisualTransformation()
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        NextButton(email,password,navController,contxt)
+                })
+            }
+            .background(color = MaterialTheme.colors.background),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ){
+            OutlinedTextField(
+                value = email,
+                label = { Text(text = "E-mail") },
+                placeholder = { Text(text = "Enter E-mail") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                onValueChange = {
+                    email = it
+                },
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        focusManager.clearFocus()
+                    }
+                ),
+                maxLines = 1,
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = MaterialTheme.colors.secondary,
+                    unfocusedBorderColor = MaterialTheme.colors.onBackground,
+                    focusedLabelColor = MaterialTheme.colors.secondary,
+                    unfocusedLabelColor = MaterialTheme.colors.onBackground,
+                    textColor = MaterialTheme.colors.onBackground,
+                    cursorColor = MaterialTheme.colors.secondary,
+                    errorBorderColor = MaterialTheme.colors.error,
+                    errorCursorColor = MaterialTheme.colors.error,
+                    errorLabelColor = MaterialTheme.colors.error,
+                    placeholderColor = MaterialTheme.colors.onBackground,
+                    disabledPlaceholderColor = MaterialTheme.colors.onBackground
+                )
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            OutlinedTextField(
+                value = password,
+                label = { Text(text = "Password") },
+                placeholder = { Text(text = "Enter Password") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                onValueChange = {
+                    password = it
+                },
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        focusManager.clearFocus()
+                    }
+                ),
+                maxLines = 1,
+                visualTransformation = PasswordVisualTransformation(),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = MaterialTheme.colors.secondary,
+                    unfocusedBorderColor = MaterialTheme.colors.onBackground,
+                    focusedLabelColor = MaterialTheme.colors.secondary,
+                    unfocusedLabelColor = MaterialTheme.colors.onBackground,
+                    textColor = MaterialTheme.colors.onBackground,
+                    cursorColor = MaterialTheme.colors.secondary,
+                    errorBorderColor = MaterialTheme.colors.error,
+                    errorCursorColor = MaterialTheme.colors.error,
+                    errorLabelColor = MaterialTheme.colors.error,
+                    placeholderColor = MaterialTheme.colors.onBackground,
+                    disabledPlaceholderColor = MaterialTheme.colors.onBackground
+                )
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            NextButton(email,password,navController,contxt)
+        }
     }
 }
 
-fun SignIn(email: String, password: String, navController: NavHostController) {
+/*fun SignIn(email: String, password: String, navController: NavHostController) {
     val query:Query = ref.orderByChild("email").equalTo(email.trim())
     auth.signInWithEmailAndPassword(email, password)
         .addOnCompleteListener { task ->
@@ -135,13 +167,9 @@ fun SignIn(email: String, password: String, navController: NavHostController) {
                 })
             }
         }
-}
+}*/
 
-fun verify(ok:Int):Int{
-    return ok
-}
-
-fun changeInfo(information:Information1){
+/*fun changeInfo(information:Information1){
     var user = auth.currentUser!!.uid
     ref.child(user).setValue(information).addOnCompleteListener(){task ->
         if(task.isSuccessful){
@@ -151,9 +179,9 @@ fun changeInfo(information:Information1){
             Log.d(TAG, "node has FAILED")
         }
     }
-}
+}*/
 
-fun SignUpInstead(email: String, password: String, navController: NavHostController, context: Context){
+/*fun SignUpInstead(email: String, password: String, navController: NavHostController, context: Context){
     auth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
@@ -178,7 +206,7 @@ fun SignUpInstead(email: String, password: String, navController: NavHostControl
                 Toast.makeText(context, "There seems to be a problem. Please try again.", Toast.LENGTH_SHORT).show()
             }
         }
-}
+}*/
 
 @Composable
 fun DialogDemo(onDismiss: () -> Unit, email: String, password: String, navController: NavHostController, context: Context) {
@@ -211,7 +239,7 @@ fun DialogDemo(onDismiss: () -> Unit, email: String, password: String, navContro
             confirmButton = {
                 Button(
                     onClick = {
-                        SignUpInstead(email, password, navController, context)
+                        //SignUpInstead(email, password, navController, context)
                         onDismiss()
                     },
                 ) {
@@ -238,20 +266,24 @@ fun DialogDemo(onDismiss: () -> Unit, email: String, password: String, navContro
 fun NextButton(email:TextFieldValue, password:TextFieldValue, navController: NavHostController,context: Context){
     var ok: Int by remember { mutableStateOf(0) }
     var showDialog: Boolean by  remember { mutableStateOf(false) }
-    TextButton(onClick ={
-        if((email.selection== TextRange(0,0) && email.composition==null) || (password.selection== TextRange(0,0) && password.composition==null)){
-            Log.d(TAG, "nothing")
-            Toast.makeText(context, "Please input email and password", Toast.LENGTH_SHORT).show()
-        }
-        else{
-            SignIn(email.text,password.text,navController)
-        }
-    }){
-        if(verif.value!=0)
-            DialogDemo(onDismiss = {verif.value=0},email.text,password.text,navController,context)
-        Surface {
-            Text("Next")
+    MainAppTheme() {
+        TextButton(onClick ={
+            if((email.selection== TextRange(0,0) && email.composition==null) || (password.selection== TextRange(0,0) && password.composition==null)){
+                Log.d(TAG, "nothing")
+                Toast.makeText(context, "Please input email and password", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                //SignIn(email.text,password.text,navController)
+                navController.navigate(route = Screen.Profile.route){
+                    popUpTo(Screen.EmailSignUp.route){inclusive = true}
+                }
+            }
+        }){
+            if(verif.value!=0)
+                DialogDemo(onDismiss = {verif.value=0},email.text,password.text,navController,context)
+            Text("Next", color = MaterialTheme.colors.onBackground)
         }
     }
+
 }
 
