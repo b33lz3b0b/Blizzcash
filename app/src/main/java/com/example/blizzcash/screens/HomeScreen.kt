@@ -52,12 +52,14 @@ fun HomeScreen(navController: NavHostController){
             }){
                 Text(text="Sign out")
             }
+            Button(onClick={
+
+            }) {
+                Text(text = "Course")
+            }
+
         }
     }
 }
 
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun HomeScreenPreview(){
-    HomeScreen(navController = rememberNavController())
-}
+
