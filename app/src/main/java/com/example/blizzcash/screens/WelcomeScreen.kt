@@ -1,5 +1,6 @@
 package com.example.blizzcash.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -27,12 +28,13 @@ lateinit var username : String*/
 
 @Composable
 fun WelcomeScreen(navController: NavHostController) {
-    var auth: FirebaseAuth = Firebase.auth
+    //var auth: FirebaseAuth = Firebase.auth
     val user = Firebase.auth.currentUser
     MainAppTheme() {
         Column( modifier = Modifier
             .fillMaxHeight()
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .background(color = MaterialTheme.colorScheme.background),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ){

@@ -23,6 +23,7 @@ import kotlin.random.Random
 
 //private val user = auth.currentUser
 //private var ref: DatabaseReference = database.getReference("users").child(user!!.uid)
+private var auth: FirebaseAuth = Firebase.auth
 private var quotes: Array<String> = arrayOf("wtf","wdym","bruh")
 
 @Composable
@@ -48,7 +49,7 @@ fun HomeScreen(navController: NavHostController){
             Spacer(modifier = Modifier.height(80.dp))
 
             Button(onClick={
-                //auth.signOut()
+                auth.signOut()
             }){
                 Text(text="Sign out")
             }

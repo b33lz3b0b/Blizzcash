@@ -67,18 +67,11 @@ fun MainAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    var colors = if (darkTheme) {
+    val colors = if (darkTheme) {
         DarkColorPalette
     } else {
         LightColorPalette
     }
-
-    MaterialTheme(
-        colorScheme = colors,
-        typography = Typography,
-        content = content
-    )
-
     // Optional, this part helps you set the statusbar color
     val view = LocalView.current
     if (!view.isInEditMode) {
@@ -90,4 +83,14 @@ fun MainAppTheme(
                 .isAppearanceLightStatusBars = !darkTheme
         }
     }
+
+    MaterialTheme(
+        colorScheme = if (darkTheme) {
+            DarkColorPalette
+        } else {
+            LightColorPalette
+        },
+        typography = Typography,
+        content = content
+    )
 }

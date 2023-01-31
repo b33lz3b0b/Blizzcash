@@ -11,7 +11,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +27,7 @@ import androidx.navigation.NavHostController
 import com.example.blizzcash.Information1
 import com.example.blizzcash.Screen
 import com.example.blizzcash.theme.MainAppTheme
+import androidx.compose.material3.MaterialTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
@@ -50,12 +50,12 @@ fun SignUpScreen(navController: NavHostController) {
         Column( modifier = Modifier
             .fillMaxHeight()
             .fillMaxWidth()
+            .background(color = MaterialTheme.colorScheme.background)
             .pointerInput(Unit) {
                 detectTapGestures(onTap = {
                     focusManager.clearFocus()
                 })
-            }
-            .background(color = MaterialTheme.colors.background),
+            },
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ){
@@ -74,17 +74,17 @@ fun SignUpScreen(navController: NavHostController) {
                 ),
                 maxLines = 1,
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = MaterialTheme.colors.secondary,
-                    unfocusedBorderColor = MaterialTheme.colors.onBackground,
-                    focusedLabelColor = MaterialTheme.colors.secondary,
-                    unfocusedLabelColor = MaterialTheme.colors.onBackground,
-                    textColor = MaterialTheme.colors.onBackground,
-                    cursorColor = MaterialTheme.colors.secondary,
-                    errorBorderColor = MaterialTheme.colors.error,
-                    errorCursorColor = MaterialTheme.colors.error,
-                    errorLabelColor = MaterialTheme.colors.error,
-                    placeholderColor = MaterialTheme.colors.onBackground,
-                    disabledPlaceholderColor = MaterialTheme.colors.onBackground
+                    focusedBorderColor = MaterialTheme.colorScheme.secondary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
+                    focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                    unfocusedLabelColor = MaterialTheme.colorScheme.onBackground,
+                    textColor = MaterialTheme.colorScheme.onBackground,
+                    cursorColor = MaterialTheme.colorScheme.secondary,
+                    errorBorderColor = MaterialTheme.colorScheme.error,
+                    errorCursorColor = MaterialTheme.colorScheme.error,
+                    errorLabelColor = MaterialTheme.colorScheme.error,
+                    placeholderColor = MaterialTheme.colorScheme.onBackground,
+                    disabledPlaceholderColor = MaterialTheme.colorScheme.onBackground
                 )
             )
             Spacer(modifier = Modifier.height(20.dp))
@@ -104,17 +104,17 @@ fun SignUpScreen(navController: NavHostController) {
                 maxLines = 1,
                 visualTransformation = PasswordVisualTransformation(),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = MaterialTheme.colors.secondary,
-                    unfocusedBorderColor = MaterialTheme.colors.onBackground,
-                    focusedLabelColor = MaterialTheme.colors.secondary,
-                    unfocusedLabelColor = MaterialTheme.colors.onBackground,
-                    textColor = MaterialTheme.colors.onBackground,
-                    cursorColor = MaterialTheme.colors.secondary,
-                    errorBorderColor = MaterialTheme.colors.error,
-                    errorCursorColor = MaterialTheme.colors.error,
-                    errorLabelColor = MaterialTheme.colors.error,
-                    placeholderColor = MaterialTheme.colors.onBackground,
-                    disabledPlaceholderColor = MaterialTheme.colors.onBackground
+                    focusedBorderColor = MaterialTheme.colorScheme.secondary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
+                    focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                    unfocusedLabelColor = MaterialTheme.colorScheme.onBackground,
+                    textColor = MaterialTheme.colorScheme.onBackground,
+                    cursorColor = MaterialTheme.colorScheme.secondary,
+                    errorBorderColor = MaterialTheme.colorScheme.error,
+                    errorCursorColor = MaterialTheme.colorScheme.error,
+                    errorLabelColor = MaterialTheme.colorScheme.error,
+                    placeholderColor = MaterialTheme.colorScheme.onBackground,
+                    disabledPlaceholderColor = MaterialTheme.colorScheme.onBackground
                 )
             )
             Spacer(modifier = Modifier.height(20.dp))
@@ -211,54 +211,59 @@ fun SignUpScreen(navController: NavHostController) {
 @Composable
 fun DialogDemo(onDismiss: () -> Unit, email: String, password: String, navController: NavHostController, context: Context) {
     if (verif.value == 1) {
-        AlertDialog(
-            onDismissRequest = { onDismiss() },
-            title = {
-                Text("Wrong password", color = Color.Black)
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        onDismiss()
-                    },
-                ) {
-                    Text("OK")
+        MainAppTheme() {
+            AlertDialog(
+                onDismissRequest = { onDismiss() },
+                title = {
+                    Text("Wrong password", color = Color.Black)
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            onDismiss()
+                        },
+                    ) {
+                        Text("OK")
+                    }
+                },
+                text = {
+                    Text("There is an account with this email, but the password seems to be incorrect. Please try again.", color = Color.Black)
                 }
-            },
-            text = {
-                Text("There is an account with this email, but the password seems to be incorrect. Please try again.", color = Color.Black)
-            }
-        )
+            )
+        }
+
     }
     else if (verif.value == 2) {
-        AlertDialog(
-            onDismissRequest = {onDismiss()},
-            title = {
-                Text("Nonexistent account", color = Color.Black)
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        //SignUpInstead(email, password, navController, context)
-                        onDismiss()
-                    },
-                ) {
-                    Text("Yes")
+        MainAppTheme() {
+            AlertDialog(
+                onDismissRequest = {onDismiss()},
+                title = {
+                    Text("Nonexistent account", color = Color.Black)
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            //SignUpInstead(email, password, navController, context)
+                            onDismiss()
+                        },
+                    ) {
+                        Text("Yes")
+                    }
+                },
+                dismissButton = {
+                    Button(
+                        onClick = {
+                            onDismiss()
+                        },
+                    ) {
+                        Text("No")
+                    }
+                },
+                text = {
+                    Text("There isn't any existing account with this email. Would you like so sign up?", color = Color.Black)
                 }
-            },
-            dismissButton = {
-                Button(
-                    onClick = {
-                        onDismiss()
-                    },
-                ) {
-                    Text("No")
-                }
-            },
-            text = {
-                Text("There isn't any existing account with this email. Would you like so sign up?", color = Color.Black)
-            }
-        )
+            )
+        }
     }
 }
 
@@ -281,7 +286,7 @@ fun NextButton(email:TextFieldValue, password:TextFieldValue, navController: Nav
         }){
             if(verif.value!=0)
                 DialogDemo(onDismiss = {verif.value=0},email.text,password.text,navController,context)
-            Text("Next", color = MaterialTheme.colors.onBackground)
+            Text("Next", color = MaterialTheme.colorScheme.onBackground)
         }
     }
 
