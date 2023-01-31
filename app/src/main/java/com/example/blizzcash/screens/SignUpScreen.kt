@@ -4,12 +4,14 @@ import android.content.ContentValues.TAG
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,9 +54,10 @@ fun SignUpScreen(navController: NavHostController) {
                 detectTapGestures(onTap = {
                     focusManager.clearFocus()
                 })
-            },
+            }
+            .background(color = MaterialTheme.colors.background),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ){
             OutlinedTextField(
                 value = email,
@@ -69,12 +72,26 @@ fun SignUpScreen(navController: NavHostController) {
                         focusManager.clearFocus()
                     }
                 ),
-                maxLines = 1
+                maxLines = 1,
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = MaterialTheme.colors.secondary,
+                    unfocusedBorderColor = MaterialTheme.colors.onBackground,
+                    focusedLabelColor = MaterialTheme.colors.secondary,
+                    unfocusedLabelColor = MaterialTheme.colors.onBackground,
+                    textColor = MaterialTheme.colors.onBackground,
+                    cursorColor = MaterialTheme.colors.secondary,
+                    errorBorderColor = MaterialTheme.colors.error,
+                    errorCursorColor = MaterialTheme.colors.error,
+                    errorLabelColor = MaterialTheme.colors.error,
+                    placeholderColor = MaterialTheme.colors.onBackground,
+                    disabledPlaceholderColor = MaterialTheme.colors.onBackground
+                )
             )
             Spacer(modifier = Modifier.height(20.dp))
             OutlinedTextField(
                 value = password,
                 label = { Text(text = "Password") },
+                placeholder = { Text(text = "Enter Password") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 onValueChange = {
                     password = it
@@ -85,13 +102,25 @@ fun SignUpScreen(navController: NavHostController) {
                     }
                 ),
                 maxLines = 1,
-                visualTransformation = PasswordVisualTransformation()
+                visualTransformation = PasswordVisualTransformation(),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = MaterialTheme.colors.secondary,
+                    unfocusedBorderColor = MaterialTheme.colors.onBackground,
+                    focusedLabelColor = MaterialTheme.colors.secondary,
+                    unfocusedLabelColor = MaterialTheme.colors.onBackground,
+                    textColor = MaterialTheme.colors.onBackground,
+                    cursorColor = MaterialTheme.colors.secondary,
+                    errorBorderColor = MaterialTheme.colors.error,
+                    errorCursorColor = MaterialTheme.colors.error,
+                    errorLabelColor = MaterialTheme.colors.error,
+                    placeholderColor = MaterialTheme.colors.onBackground,
+                    disabledPlaceholderColor = MaterialTheme.colors.onBackground
+                )
             )
             Spacer(modifier = Modifier.height(20.dp))
             NextButton(email,password,navController,contxt)
         }
     }
-
 }
 
 /*fun SignIn(email: String, password: String, navController: NavHostController) {
@@ -237,23 +266,24 @@ fun DialogDemo(onDismiss: () -> Unit, email: String, password: String, navContro
 fun NextButton(email:TextFieldValue, password:TextFieldValue, navController: NavHostController,context: Context){
     var ok: Int by remember { mutableStateOf(0) }
     var showDialog: Boolean by  remember { mutableStateOf(false) }
-    TextButton(onClick ={
-        if((email.selection== TextRange(0,0) && email.composition==null) || (password.selection== TextRange(0,0) && password.composition==null)){
-            Log.d(TAG, "nothing")
-            Toast.makeText(context, "Please input email and password", Toast.LENGTH_SHORT).show()
-        }
-        else{
-            //SignIn(email.text,password.text,navController)
-            navController.navigate(route = Screen.Profile.route){
-                popUpTo(Screen.EmailSignUp.route){inclusive = true}
+    MainAppTheme() {
+        TextButton(onClick ={
+            if((email.selection== TextRange(0,0) && email.composition==null) || (password.selection== TextRange(0,0) && password.composition==null)){
+                Log.d(TAG, "nothing")
+                Toast.makeText(context, "Please input email and password", Toast.LENGTH_SHORT).show()
             }
-        }
-    }){
-        if(verif.value!=0)
-            DialogDemo(onDismiss = {verif.value=0},email.text,password.text,navController,context)
-        Surface {
-            Text("Next")
+            else{
+                //SignIn(email.text,password.text,navController)
+                navController.navigate(route = Screen.Profile.route){
+                    popUpTo(Screen.EmailSignUp.route){inclusive = true}
+                }
+            }
+        }){
+            if(verif.value!=0)
+                DialogDemo(onDismiss = {verif.value=0},email.text,password.text,navController,context)
+            Text("Next", color = MaterialTheme.colors.onBackground)
         }
     }
+
 }
 

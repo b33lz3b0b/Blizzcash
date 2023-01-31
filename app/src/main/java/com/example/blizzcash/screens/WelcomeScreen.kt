@@ -3,6 +3,7 @@ package com.example.blizzcash.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -52,23 +53,30 @@ fun WelcomeScreen(navController: NavHostController) {
 
 @Composable
 fun WelcomeButton(navController: NavController, next:String) {
-    Button(onClick={
-        val user = Firebase.auth.currentUser
-        if (user != null) {
-            navController.navigate(route = "home")
-        } else {
-            navController.navigate(route = "signup")
-        } },
-        colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray, contentColor = Color.LightGray)
-    ){
-        Text(next)
+    MainAppTheme() {
+        Button(onClick={
+            val user = Firebase.auth.currentUser
+            if (user != null) {
+                navController.navigate(route = "home")
+            } else {
+                navController.navigate(route = "signup")
+            } },
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary, contentColor = MaterialTheme.colorScheme.onPrimary)
+        ){
+            Text(next)
+        }
     }
+
 }
 @Composable
 fun WelcomeText(greeting:String){
-    Text(
-        greeting,
-        fontSize = 30.sp
-    )
+    MainAppTheme() {
+        Text(
+            greeting,
+            fontSize = 30.sp,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+    }
+
 }
 

@@ -33,8 +33,8 @@ private val DarkColorPalette = darkColorScheme(
     onBackground = OnBackgroundDark,
     surface = SurfaceDark,
     outline = OutlineDark,
-    surfaceVariant = SurfaceVariantDark,
-    onSurfaceVariant = OnSurfaceVariantDark,
+    surfaceVariant = SurfaceDark,
+    onSurfaceVariant = OnSurfaceDark,
 )
 
 private val LightColorPalette = lightColorScheme(
@@ -58,8 +58,8 @@ private val LightColorPalette = lightColorScheme(
     onBackground = OnBackgroundLight,
     surface = SurfaceLight,
     outline = OutlineLight,
-    surfaceVariant = SurfaceVariantLight,
-    onSurfaceVariant = OnSurfaceVariantLight,
+    surfaceVariant = SurfaceLight,
+    onSurfaceVariant = OnSurfaceLight,
 )
 
 @Composable
@@ -67,7 +67,7 @@ fun MainAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colors = if (darkTheme) {
+    var colors = if (darkTheme) {
         DarkColorPalette
     } else {
         LightColorPalette
