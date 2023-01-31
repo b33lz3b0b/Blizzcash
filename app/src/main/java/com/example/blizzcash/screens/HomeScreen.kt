@@ -8,6 +8,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.blizzcash.Strings
@@ -19,8 +21,9 @@ import com.google.firebase.ktx.Firebase
 
 
 
+
 @Composable
-fun HomeScreen(navController: NavHostController){
+fun HomeScreen(navController: NavHostController?){
     val user = auth.currentUser
     var ref: DatabaseReference = database.getReference("users").child(user!!.uid)
     Column(modifier=Modifier.fillMaxWidth()){
@@ -34,3 +37,9 @@ fun HomeScreen(navController: NavHostController){
         }
     }
 }
+@Preview
+@Composable
+fun Preview () {
+    HomeScreen(null)
+}
+
