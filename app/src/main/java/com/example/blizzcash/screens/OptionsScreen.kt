@@ -35,16 +35,17 @@ fun OptionsScreen(navController: NavHostController) {
     MainAppTheme() {
         Column( modifier = Modifier
             .fillMaxHeight()
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.background),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ){
             SelectCourseText()
             Spacer(modifier = Modifier.height(20.dp))
             SelectCourseButton("Allowance", navController)
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(40.dp))
             SelectCourseButton("Salary", navController)
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(40.dp))
             SelectCourseButton("Entrepreneur", navController)
         }
     }
@@ -57,7 +58,8 @@ fun SelectCourseText(){
         "Which course would you like to choose?",
         style = MaterialTheme.typography.displayLarge,
         modifier = Modifier.padding(10.dp),
-        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center,
+        color = MaterialTheme.colorScheme.onBackground
     )
 }
 @Composable
@@ -69,11 +71,12 @@ fun SelectCourseButton(course_type: String, navController: NavController){
             popUpTo(Screen.Options.route) {inclusive = true}
         }},
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color.DarkGray,
-            contentColor = Color.LightGray
-        )
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+        ),
+        modifier = Modifier.height(150.dp).width(350.dp),
     ){
-        Text(course_type)
+        Text(course_type, style = MaterialTheme.typography.bodyMedium)
     }
 }
 

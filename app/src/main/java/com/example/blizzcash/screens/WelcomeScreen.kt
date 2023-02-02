@@ -63,7 +63,7 @@ fun WelcomeButton(navController: NavController, next:String) {
             } else {
                 navController.navigate(route = "signup")
             } },
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary, contentColor = MaterialTheme.colorScheme.onPrimary)
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer, contentColor = MaterialTheme.colorScheme.onPrimaryContainer)
         ){
             Text(next)
         }

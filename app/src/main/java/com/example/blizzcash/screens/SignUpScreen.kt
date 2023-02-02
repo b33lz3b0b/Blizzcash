@@ -61,8 +61,8 @@ fun SignUpScreen(navController: NavHostController) {
         ){
             OutlinedTextField(
                 value = email,
-                label = { Text(text = "E-mail") },
-                placeholder = { Text(text = "Enter E-mail") },
+                label = { Text(text = "E-mail", style = MaterialTheme.typography.labelLarge) },
+                placeholder = { Text(text = "Enter E-mail", style = MaterialTheme.typography.labelLarge) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 onValueChange = {
                     email = it
@@ -90,8 +90,8 @@ fun SignUpScreen(navController: NavHostController) {
             Spacer(modifier = Modifier.height(20.dp))
             OutlinedTextField(
                 value = password,
-                label = { Text(text = "Password") },
-                placeholder = { Text(text = "Enter Password") },
+                label = { Text(text = "Password", style = MaterialTheme.typography.labelLarge) },
+                placeholder = { Text(text = "Enter Password", style = MaterialTheme.typography.labelLarge) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 onValueChange = {
                     password = it
@@ -286,7 +286,7 @@ fun NextButton(email:TextFieldValue, password:TextFieldValue, navController: Nav
         }){
             if(verif.value!=0)
                 DialogDemo(onDismiss = {verif.value=0},email.text,password.text,navController,context)
-            Text("Next", color = MaterialTheme.colorScheme.onBackground)
+            Text("Next", color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.labelLarge)
         }
     }
 

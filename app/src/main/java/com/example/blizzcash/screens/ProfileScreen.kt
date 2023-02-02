@@ -3,12 +3,12 @@ package com.example.blizzcash.screens
 import android.content.ContentValues
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material.Button
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,6 +16,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -44,7 +45,8 @@ fun ProfileScreen(navController: NavHostController){
                 detectTapGestures(onTap = {
                     focusManager.clearFocus()
                 })
-            },
+            }
+            .background(MaterialTheme.colorScheme.background),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ){
@@ -53,7 +55,7 @@ fun ProfileScreen(navController: NavHostController){
             val contxt = LocalContext.current
             OutlinedTextField(
                 value = name,
-                label = { Text(text = "Enter Your Name") },
+                label = { Text(text = "Enter Your Name", style = MaterialTheme.typography.labelLarge) },
                 onValueChange = {
                     if(it.text.length <= maxChar)
                         name = it
@@ -65,10 +67,23 @@ fun ProfileScreen(navController: NavHostController){
                         focusManager.clearFocus()
                     }
                 ),
-                maxLines = 1
+                maxLines = 1,
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = MaterialTheme.colorScheme.secondary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
+                    focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                    unfocusedLabelColor = MaterialTheme.colorScheme.onBackground,
+                    textColor = MaterialTheme.colorScheme.onBackground,
+                    cursorColor = MaterialTheme.colorScheme.secondary,
+                    errorBorderColor = MaterialTheme.colorScheme.error,
+                    errorCursorColor = MaterialTheme.colorScheme.error,
+                    errorLabelColor = MaterialTheme.colorScheme.error,
+                    placeholderColor = MaterialTheme.colorScheme.onBackground,
+                    disabledPlaceholderColor = MaterialTheme.colorScheme.onBackground
+                )
             )
             Spacer(modifier = Modifier.height(20.dp))
-            Button(onClick ={
+            TextButton(onClick ={
                 //val user = auth.currentUser
                 if(name.selection== TextRange(0,0) && name.composition==null){
                     Log.d(ContentValues.TAG, "nothing")
@@ -85,7 +100,7 @@ fun ProfileScreen(navController: NavHostController){
                     }
                 }
             }){
-                Text("Create profile")
+                Text("Create profile", color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.labelLarge)
             }
         }
     }
