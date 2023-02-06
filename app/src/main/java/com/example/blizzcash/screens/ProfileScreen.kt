@@ -1,39 +1,48 @@
 package com.example.blizzcash.screens
 
+import com.example.blizzcash.R
 import android.content.ContentValues
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.blizzcash.Information1
 import com.example.blizzcash.Information2
 import com.example.blizzcash.Screen
 import com.example.blizzcash.theme.MainAppTheme
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.ktx.Firebase
-import kotlin.random.Random
+
 
 /*private var auth: FirebaseAuth = Firebase.auth
 private var database = FirebaseDatabase.getInstance()
 private var ref: DatabaseReference = database.getReference("users").child(auth.currentUser!!.uid)*/
+
+private val PfpArray = intArrayOf(
+    R.drawable.pfp_1,
+    R.drawable.pfp_2,
+    R.drawable.pfp_3
+)
+
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ProfileScreen(navController: NavHostController){
     val focusManager = LocalFocusManager.current
@@ -53,6 +62,38 @@ fun ProfileScreen(navController: NavHostController){
             var name: TextFieldValue by remember { mutableStateOf(TextFieldValue("")) }
             val maxChar = 20
             val contxt = LocalContext.current
+            var flag : Int by remember{mutableStateOf(0)}
+            var enabledPrev by remember { mutableStateOf(true) }
+            var enabledNext by remember { mutableStateOf(true) }
+            Row(modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically){
+                TextButton(onClick = {if(flag>0) flag-- else /*enabledPrev = false*/ flag = 2}, enabled = enabledPrev) {
+                    Text(text = "previous",color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.labelLarge)
+                }
+                AnimatedContent(
+                    flag,
+                    transitionSpec = {
+                        fadeIn(animationSpec = tween(durationMillis = 1000)) with
+                                fadeOut(animationSpec = tween(durationMillis = 500))
+                    }
+                ) { targetState ->
+                    Image(
+                        painterResource(PfpArray[targetState]),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,            // crop the image if it's not a square
+                        modifier = Modifier
+                            .size(164.dp)
+                            .clip(CircleShape)
+                            .background(color = MaterialTheme.colorScheme.onBackground)
+                    )
+                }
+                TextButton(onClick = {if(flag<2) flag++ else /*enabledNext = false*/ flag = 0}, enabled = enabledNext) {
+                    Text(text = "next",color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.labelLarge)
+                }
+            }
+            Spacer(modifier = Modifier.height(20.dp))
             OutlinedTextField(
                 value = name,
                 label = { Text(text = "Enter Your Name", style = MaterialTheme.typography.labelLarge) },
@@ -90,13 +131,13 @@ fun ProfileScreen(navController: NavHostController){
                     Toast.makeText(contxt, "Please input username", Toast.LENGTH_SHORT).show()
                 }
                 else{
-                    val information = Information2(username = name.text,pfp = Random.nextInt(0,10))
+                    val information = Information2(username = name.text,pfp = flag)
                     //changeInfo(information)
                     Log.d(ContentValues.TAG, name.toString())
-                }
-                navController.navigate(route = Screen.Options.route){
-                    popUpTo(Screen.Profile.route){
-                        inclusive = true
+                    navController.navigate(route = Screen.Options.route){
+                        popUpTo(Screen.Profile.route){
+                            inclusive = true
+                        }
                     }
                 }
             }){
