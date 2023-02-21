@@ -39,5 +39,13 @@ fun Navigation(navController: NavHostController){
                 HomeScreen(navController = navController)
             }
         }
+        navigation(
+            startDestination = Screen.Course.route,
+            route = "course"
+        ){
+            composable(route = Screen.Course.route){
+                CourseScreen(navController = navController)
+            }
+        }
     }
 }

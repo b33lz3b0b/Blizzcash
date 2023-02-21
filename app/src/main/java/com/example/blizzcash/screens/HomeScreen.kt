@@ -2,14 +2,18 @@ package com.example.blizzcash.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.blizzcash.Screen
 import com.example.blizzcash.theme.MainAppTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -44,52 +48,51 @@ fun HomeScreen(navController: NavHostController){
                 Text(text = "username", color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.displaySmall)
                 Text(text = quotes[Random.nextInt(0,2)], color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.displaySmall)
             }
-            Spacer(modifier = Modifier.height(80.dp))
-            Column(modifier=Modifier.fillMaxWidth().fillMaxHeight(0.75f),
-                horizontalAlignment = Alignment.CenterHorizontally){
-                Row(modifier = Modifier.fillMaxWidth(0.95f).fillMaxHeight(0.5f),
-                    horizontalArrangement = Arrangement.SpaceEvenly){
-                    Button(onClick = { /*TODO*/ },
+            Spacer(modifier = Modifier.height(40.dp))
+            Column(modifier=Modifier.fillMaxWidth().height(500.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceAround){
+                Row(modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround){
+                    Button(onClick = { navController.navigate(route = "course") },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
                             contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                         ),
-                        modifier = Modifier.fillMaxWidth(0.5f).fillMaxHeight()
+                        modifier = Modifier.width(180.dp).height(240.dp)
                     ) {
-                        Text("Course", style = MaterialTheme.typography.bodySmall)
+                        Text("Course", style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center)
                     }
-                    Spacer(modifier = Modifier.width(10.dp))
                     Button(onClick = { /*TODO*/ },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
                             contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                         ),
-                        modifier = Modifier.fillMaxWidth().fillMaxHeight()
+                        modifier = Modifier.width(180.dp).height(240.dp),
+
                     ) {
-                        Text("Practice", style = MaterialTheme.typography.bodySmall)
+                        Text("Practice", style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center)
                     }
                 }
-                Spacer(modifier = Modifier.height(10.dp))
-                Row(modifier = Modifier.fillMaxWidth(0.95f).fillMaxHeight(),
-                    horizontalArrangement = Arrangement.SpaceEvenly){
+                Row(modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround){
                     Button(onClick = { /*TODO*/ },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
                             contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                         ),
-                        modifier = Modifier.fillMaxWidth(0.5f).fillMaxHeight()
+                        modifier = Modifier.width(180.dp).height(240.dp)
                     ) {
-                        Text("Apply your skills", style = MaterialTheme.typography.bodySmall)
+                        Text("Apply your skills", style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center)
                     }
-                    Spacer(modifier = Modifier.width(10.dp))
                     Button(onClick = { /*TODO*/ },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
                             contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                         ),
-                        modifier = Modifier.fillMaxWidth().fillMaxHeight()
+                        modifier = Modifier.width(180.dp).height(240.dp)
                     ) {
-                        Text("Exp journal", style = MaterialTheme.typography.bodySmall)
+                        Text("Exp journal", style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center)
                     }
                 }
             }
@@ -102,10 +105,4 @@ fun HomeScreen(navController: NavHostController){
         }
     }
 
-}
-
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun HomeScreenPreview(){
-    HomeScreen(navController = rememberNavController())
 }
