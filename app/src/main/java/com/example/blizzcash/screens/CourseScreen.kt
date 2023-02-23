@@ -21,18 +21,25 @@ import androidx.navigation.NavController
 import com.example.blizzcash.theme.MainAppTheme
 import com.google.firebase.database.snapshot.Index
 
-data class LevelInfo(val name:String, val highscore:Int, val unlocked:Boolean)
+data class LevelInfo(val name:String, val desc:String, val highscore:Int, val unlocked:Boolean)
 private val levelList = mutableListOf<LevelInfo>(
-    LevelInfo("Level 1", 0, false),
-    LevelInfo("Level 2", 20, false),
-    LevelInfo("Level 3", 0, true)
+    LevelInfo("Level 1", "Desc1",20, true),
+    LevelInfo("Level 2", "Desc2",0, false),
+    LevelInfo("Level 3", "Desc3",0, false),
+    LevelInfo("Level 4", "Desc4",0, false),
+    LevelInfo("Level 5", "Desc5",0, false),
+    LevelInfo("Level 6", "Desc6",0, false),
+    LevelInfo("Level 7", "Desc7",0, false),
+    LevelInfo("Level 8", "Desc8",0, false),
+    LevelInfo("Level 9","Desc9",0, false),
+    LevelInfo("Level 10", "Desc10",0, false)
 )
 
 @Composable
-fun CourseScreen(navController: NavController) {
+fun CourseScreen(navController: NavController){
     MainAppTheme() {
         LazyColumn(
-            contentPadding = PaddingValues(all = 10.dp),
+            contentPadding = PaddingValues(all = 20.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
             horizontalAlignment = Alignment.CenterHorizontally ,
             modifier = Modifier
@@ -51,18 +58,23 @@ fun CustomItem(model: LevelInfo){
     MainAppTheme(){
         val txt = model.highscore
         Box(modifier = Modifier
-            .fillMaxWidth(0.9f)
+            .fillMaxWidth(0.96f)
             .background(
                 color = MaterialTheme.colorScheme.primaryContainer,
                 shape = RoundedCornerShape(5.dp)
             )
             .padding(all = 10.dp)
-            .width(60.dp)){
+            .width(60.dp)
+        ){
             Column(modifier = Modifier
-                .padding(all = 5.dp)){
+                .padding(all = 5.dp)
+            ){
                 Text(model.name, style = MaterialTheme.typography.displayLarge, color = MaterialTheme.colorScheme.onPrimaryContainer)
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(model.desc, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
+                Spacer(modifier = Modifier.height(10.dp))
                 Row(horizontalArrangement = Arrangement.SpaceAround,
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth()){
                     Text("highscore:$txt/100",style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
                     Button(enabled = model.unlocked, onClick= {},
@@ -77,6 +89,7 @@ fun CustomItem(model: LevelInfo){
                             Text("???", style = MaterialTheme.typography.labelLarge, textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.error)
                     }
                 }
+                Spacer(modifier = Modifier.height(10.dp))
             }
         }
     }

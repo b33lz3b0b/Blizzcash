@@ -6,8 +6,10 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -87,6 +89,10 @@ fun ProfileScreen(navController: NavHostController){
                             .size(164.dp)
                             .clip(CircleShape)
                             .background(color = MaterialTheme.colorScheme.onBackground)
+                            .border(
+                                BorderStroke(2.dp, MaterialTheme.colorScheme.onBackground),
+                                CircleShape
+                            )
                     )
                 }
                 TextButton(onClick = {if(flag<2) flag++ else /*enabledNext = false*/ flag = 0}, enabled = enabledNext) {
