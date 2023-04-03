@@ -15,6 +15,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -32,11 +35,16 @@ import androidx.navigation.NavHostController
 import com.example.blizzcash.Information2
 import com.example.blizzcash.Screen
 import com.example.blizzcash.theme.MainAppTheme
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
 
 
-/*private var auth: FirebaseAuth = Firebase.auth
+private var auth: FirebaseAuth = Firebase.auth
 private var database = FirebaseDatabase.getInstance()
-private var ref: DatabaseReference = database.getReference("users").child(auth.currentUser!!.uid)*/
+private var ref: DatabaseReference = database.getReference("users").child(auth.currentUser!!.uid)
 
 private val PfpArray = intArrayOf(
     R.drawable.pfp_1,
@@ -64,15 +72,18 @@ fun ProfileScreen(navController: NavHostController){
             var name: TextFieldValue by remember { mutableStateOf(TextFieldValue("")) }
             val maxChar = 20
             val contxt = LocalContext.current
-            var flag : Int by remember{mutableStateOf(0)}
+            var flag : Int by remember { mutableStateOf(0) }
             var enabledPrev by remember { mutableStateOf(true) }
             var enabledNext by remember { mutableStateOf(true) }
             Row(modifier = Modifier
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically){
-                TextButton(onClick = {if(flag>0) flag-- else /*enabledPrev = false*/ flag = 2}, enabled = enabledPrev) {
+                /*TextButton(onClick = {if(flag>0) flag-- else flag = 2}, enabled = enabledPrev) {
                     Text(text = "previous",color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.labelLarge)
+                }*/
+                IconButton(onClick = {if(flag>0) flag-- else flag = 2}, enabled = enabledPrev){
+                    Icon(Icons.Filled.ArrowBack, contentDescription = "previous", tint = MaterialTheme.colorScheme.onBackground)
                 }
                 AnimatedContent(
                     flag,
@@ -84,7 +95,7 @@ fun ProfileScreen(navController: NavHostController){
                     Image(
                         painterResource(PfpArray[targetState]),
                         contentDescription = null,
-                        contentScale = ContentScale.Crop,            // crop the image if it's not a square
+                        contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .size(164.dp)
                             .clip(CircleShape)
@@ -95,8 +106,11 @@ fun ProfileScreen(navController: NavHostController){
                             )
                     )
                 }
-                TextButton(onClick = {if(flag<2) flag++ else /*enabledNext = false*/ flag = 0}, enabled = enabledNext) {
+                /*TextButton(onClick = {if(flag<2) flag++ else flag = 0}, enabled = enabledNext) {
                     Text(text = "next",color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.labelLarge)
+                }*/
+                IconButton(onClick = {if(flag<2) flag++ else flag = 0}, enabled = enabledNext){
+                    Icon(Icons.Filled.ArrowForward, contentDescription = "next", tint = MaterialTheme.colorScheme.onBackground)
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
@@ -131,14 +145,14 @@ fun ProfileScreen(navController: NavHostController){
             )
             Spacer(modifier = Modifier.height(20.dp))
             TextButton(onClick ={
-                //val user = auth.currentUser
+                val user = auth.currentUser
                 if(name.selection== TextRange(0,0) && name.composition==null){
                     Log.d(ContentValues.TAG, "nothing")
                     Toast.makeText(contxt, "Please input username", Toast.LENGTH_SHORT).show()
                 }
                 else{
                     val information = Information2(username = name.text,pfp = flag)
-                    //changeInfo(information)
+                    changeInfo(information)
                     Log.d(ContentValues.TAG, name.toString())
                     navController.navigate(route = Screen.Options.route){
                         popUpTo(Screen.Profile.route){
@@ -153,8 +167,8 @@ fun ProfileScreen(navController: NavHostController){
     }
 }
 
-/*fun changeInfo(information:Information2){
-    ref.child("username").setValue(information.username).addOnCompleteListener(){task ->
+fun changeInfo(information:Information2){
+    ref.child("username").setValue(information.username).addOnCompleteListener(){ task ->
         if(task.isSuccessful){
             Log.d(ContentValues.TAG, "node is completed")
         }
@@ -162,7 +176,7 @@ fun ProfileScreen(navController: NavHostController){
             Log.d(ContentValues.TAG, "node has FAILED")
         }
     }
-    ref.child("pfp").setValue(information.pfp).addOnCompleteListener(){task ->
+    ref.child("pfp").setValue(information.pfp).addOnCompleteListener(){ task ->
         if(task.isSuccessful){
             Log.d(ContentValues.TAG, "node is completed")
         }
@@ -170,4 +184,4 @@ fun ProfileScreen(navController: NavHostController){
             Log.d(ContentValues.TAG, "node has FAILED")
         }
     }
-}*/
+}

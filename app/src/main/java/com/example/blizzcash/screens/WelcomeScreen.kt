@@ -1,5 +1,7 @@
 package com.example.blizzcash.screens
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
@@ -18,17 +20,17 @@ import com.example.blizzcash.Screen
 import com.example.blizzcash.theme.MainAppTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 
-/*private var auth: FirebaseAuth = Firebase.auth
+//private var auth: FirebaseAuth = Firebase.auth
 private var database = FirebaseDatabase.getInstance()
-lateinit var username : String*/
+//private val user = auth.currentUser
+//private var ref: DatabaseReference = database.getReference("users").child(user!!.uid)
 
 @Composable
 fun WelcomeScreen(navController: NavHostController) {
-    //var auth: FirebaseAuth = Firebase.auth
+    var auth: FirebaseAuth = Firebase.auth
     val user = Firebase.auth.currentUser
     MainAppTheme() {
         Column( modifier = Modifier
@@ -40,7 +42,8 @@ fun WelcomeScreen(navController: NavHostController) {
         ){
             if (user != null) {
                 //var ref: DatabaseReference = database.getReference("users").child(user!!.uid)
-                WelcomeText("Welcome back, ")
+                //listenername()
+                WelcomeText("Welcome back")
                 Spacer(modifier = Modifier.height(20.dp))
                 WelcomeButton(navController, "Continue")
             } else {
@@ -59,9 +62,9 @@ fun WelcomeButton(navController: NavController, next:String) {
         Button(onClick={
             val user = Firebase.auth.currentUser
             if (user != null) {
-                navController.navigate(route = "home")
+                navController.navigate(route = Screen.Home.route)
             } else {
-                navController.navigate(route = "signup")
+                navController.navigate(route = Screen.EmailSignUp.route)
             } },
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer, contentColor = MaterialTheme.colorScheme.onPrimaryContainer)
         ){
@@ -81,4 +84,6 @@ fun WelcomeText(greeting:String){
     }
 
 }
+
+
 

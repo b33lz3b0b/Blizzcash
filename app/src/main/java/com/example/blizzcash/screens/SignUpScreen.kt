@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,9 +37,9 @@ import com.google.firebase.ktx.Firebase
 import kotlin.math.absoluteValue
 
 
-/*private var auth: FirebaseAuth = Firebase.auth
+private var auth: FirebaseAuth = Firebase.auth
 private var database = FirebaseDatabase.getInstance()
-private var ref: DatabaseReference = database.getReference("users")*/
+private var ref: DatabaseReference = database.getReference("users")
 private var verif = mutableStateOf(0)
 
 @Composable
@@ -123,12 +125,12 @@ fun SignUpScreen(navController: NavHostController) {
     }
 }
 
-/*fun SignIn(email: String, password: String, navController: NavHostController) {
+fun SignIn(email: String, password: String, navController: NavHostController) {
     val query:Query = ref.orderByChild("email").equalTo(email.trim())
     auth.signInWithEmailAndPassword(email, password)
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                // Sign in success, update UI with the signed-in user's information
+                // Sign in success
                 Log.d(TAG, "signInWithEmail:success")
                 val user = auth.currentUser
                 if(user?.isEmailVerified!!)
@@ -167,9 +169,9 @@ fun SignUpScreen(navController: NavHostController) {
                 })
             }
         }
-}*/
+}
 
-/*fun changeInfo(information:Information1){
+fun changeInfo(information:Information1){
     var user = auth.currentUser!!.uid
     ref.child(user).setValue(information).addOnCompleteListener(){task ->
         if(task.isSuccessful){
@@ -179,9 +181,9 @@ fun SignUpScreen(navController: NavHostController) {
             Log.d(TAG, "node has FAILED")
         }
     }
-}*/
+}
 
-/*fun SignUpInstead(email: String, password: String, navController: NavHostController, context: Context){
+fun SignUpInstead(email: String, password: String, navController: NavHostController, context: Context){
     auth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
@@ -194,7 +196,7 @@ fun SignUpScreen(navController: NavHostController) {
                             Log.d(TAG, "Email sent.")
                         }
                     }
-                val information = Information1(email = email, password = password)
+                val information = Information1(email = email)
                 changeInfo(information)
                 user.reload()
                 navController.navigate(route = Screen.Profile.route){
@@ -206,7 +208,7 @@ fun SignUpScreen(navController: NavHostController) {
                 Toast.makeText(context, "There seems to be a problem. Please try again.", Toast.LENGTH_SHORT).show()
             }
         }
-}*/
+}
 
 @Composable
 fun DialogDemo(onDismiss: () -> Unit, email: String, password: String, navController: NavHostController, context: Context) {
@@ -215,19 +217,23 @@ fun DialogDemo(onDismiss: () -> Unit, email: String, password: String, navContro
             AlertDialog(
                 onDismissRequest = { onDismiss() },
                 title = {
-                    Text("Wrong password", color = Color.Black)
+                    Text("Wrong password", color = MaterialTheme.colorScheme.onBackground)
                 },
                 confirmButton = {
                     Button(
                         onClick = {
                             onDismiss()
                         },
+                        colors = androidx.compose.material.ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
                     ) {
                         Text("OK")
                     }
                 },
                 text = {
-                    Text("There is an account with this email, but the password seems to be incorrect. Please try again.", color = Color.Black)
+                    Text("There is an account with this email, but the password seems to be incorrect. Please try again.", color = MaterialTheme.colorScheme.primary)
                 }
             )
         }
@@ -238,14 +244,18 @@ fun DialogDemo(onDismiss: () -> Unit, email: String, password: String, navContro
             AlertDialog(
                 onDismissRequest = {onDismiss()},
                 title = {
-                    Text("Nonexistent account", color = Color.Black)
+                    Text("Nonexistent account", color = MaterialTheme.colorScheme.onBackground)
                 },
                 confirmButton = {
                     Button(
                         onClick = {
-                            //SignUpInstead(email, password, navController, context)
+                            SignUpInstead(email, password, navController, context)
                             onDismiss()
                         },
+                        colors = androidx.compose.material.ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
                     ) {
                         Text("Yes")
                     }
@@ -255,12 +265,16 @@ fun DialogDemo(onDismiss: () -> Unit, email: String, password: String, navContro
                         onClick = {
                             onDismiss()
                         },
+                        colors = androidx.compose.material.ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
                     ) {
                         Text("No")
                     }
                 },
                 text = {
-                    Text("There isn't any existing account with this email. Would you like so sign up?", color = Color.Black)
+                    Text("There isn't any existing account with this email. Would you like so sign up?", color = MaterialTheme.colorScheme.onBackground)
                 }
             )
         }
@@ -278,10 +292,7 @@ fun NextButton(email:TextFieldValue, password:TextFieldValue, navController: Nav
                 Toast.makeText(context, "Please input email and password", Toast.LENGTH_SHORT).show()
             }
             else{
-                //SignIn(email.text,password.text,navController)
-                navController.navigate(route = Screen.Profile.route){
-                    popUpTo(Screen.EmailSignUp.route){inclusive = true}
-                }
+                SignIn(email.text,password.text,navController)
             }
         }){
             if(verif.value!=0)

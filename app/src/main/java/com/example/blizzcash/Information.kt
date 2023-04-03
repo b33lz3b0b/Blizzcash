@@ -3,14 +3,14 @@ package com.example.blizzcash
 import com.google.firebase.database.Exclude
 
 data class Information1(
-    var email:String? = null,
-    var password:String? = null
+    var email:String? = null/*,
+    var password:String? = null*/
 ){
     @Exclude
     fun toMap(): Map<String, Any?>{
         return mapOf(
             "email" to email,
-            "password" to password
+            /*"password" to password*/
         )
     }
 }
@@ -28,17 +28,20 @@ data class Information2(
     }
 }
 
+
 data class Information3(
     var course:String? = null,
     var level:Int? = null,
-    var lesson:Int? = null
+    var lesson:Int? = null,
+    //var scores: scoresList? = scoresList(0,0)
 ){
     @Exclude
     fun toMap(): Map<String, Any?>{
         return mapOf(
             "course" to course,
             "level" to level,
-            "lesson" to lesson
+            "lesson" to lesson,
+            //"scores" to scores
         )
     }
 }

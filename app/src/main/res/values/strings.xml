@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Blizzcash</string>
+    <string-array name="allowence_text1">
+        <item>"hello"</item>
+        <item>"hi"</item>
+    </string-array>
 </resources>

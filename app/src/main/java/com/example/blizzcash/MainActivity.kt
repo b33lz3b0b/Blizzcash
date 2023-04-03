@@ -39,7 +39,8 @@ class MainActivity: ComponentActivity(){
         ){}
         pushNotificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
         pushNotificationPermissionLauncher.launch(android.Manifest.permission.ACCESS_NETWORK_STATE)
-
+        if(auth.currentUser==null)
+            auth.signOut()
     }
 
 

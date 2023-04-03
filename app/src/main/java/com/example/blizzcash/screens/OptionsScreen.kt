@@ -11,10 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.blizzcash.Information3
@@ -26,12 +24,14 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 
-/*private var auth: FirebaseAuth = Firebase.auth
+private var auth: FirebaseAuth = Firebase.auth
 private var database = FirebaseDatabase.getInstance()
-private var ref: DatabaseReference = database.getReference("users").child(auth.currentUser!!.uid)*/
+private var ref: DatabaseReference = database.getReference("users").child(auth.currentUser!!.uid)
+var usernamename = "user"
 
 @Composable
 fun OptionsScreen(navController: NavHostController) {
+
     MainAppTheme() {
         Column( modifier = Modifier
             .fillMaxHeight()
@@ -42,11 +42,11 @@ fun OptionsScreen(navController: NavHostController) {
         ){
             SelectCourseText()
             Spacer(modifier = Modifier.height(20.dp))
-            SelectCourseButton("Allowance", navController)
+            SelectCourseButton("Allowance", navController, true)
             Spacer(modifier = Modifier.height(40.dp))
-            SelectCourseButton("Salary", navController)
+            SelectCourseButton("Salary", navController, true)
             Spacer(modifier = Modifier.height(40.dp))
-            SelectCourseButton("Entrepreneur", navController)
+            SelectCourseButton("Entrepreneur", navController, false)
         }
     }
 
@@ -63,10 +63,11 @@ fun SelectCourseText(){
     )
 }
 @Composable
-fun SelectCourseButton(course_type: String, navController: NavController){
-    Button(onClick= {
-        val information = Information3(course = course_type,level = 1, lesson = 1)
-        //changeInfo(information)
+fun SelectCourseButton(course_type: String, navController: NavController, enabled: Boolean){
+    changeScoresInfo(IntArray(21){0})
+    Button(enabled = enabled, onClick= {
+        val information = Information3(course = course_type, level = 0, lesson = 1)
+        changeInfo(information)
         navController.navigate(route = Screen.Home.route){
             popUpTo(Screen.Options.route) {inclusive = true}
         }},
@@ -80,7 +81,7 @@ fun SelectCourseButton(course_type: String, navController: NavController){
     }
 }
 
-/*fun changeInfo(information: Information3){
+fun changeInfo(information: Information3){
     ref.child("course").setValue(information.course).addOnCompleteListener(){task ->
         if(task.isSuccessful){
             Log.d(ContentValues.TAG, "node is completed")
@@ -105,4 +106,17 @@ fun SelectCourseButton(course_type: String, navController: NavController){
             Log.d(ContentValues.TAG, "node has FAILED")
         }
     }
-}*/
+}
+
+fun changeScoresInfo(information:IntArray){
+    for(i in 0..20){
+        ref.child("scores").child("$i").setValue(information[i]).addOnCompleteListener(){task ->
+            if(task.isSuccessful){
+                Log.d(ContentValues.TAG, "node is completed")
+            }
+            else{
+                Log.d(ContentValues.TAG, "node has FAILED")
+            }
+        }
+    }
+}
