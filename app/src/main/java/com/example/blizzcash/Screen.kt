@@ -10,6 +10,7 @@ sealed class Screen(val route: String){
     object Home: Screen("home_screen")
     object Practice: Screen("practice_screen")
     object Courses: Screen("courses_screen")
+    object AllowanceLesson0: Screen("allowancelesson0")
     object AllowanceLesson1: Screen("allowancelesson1")
     object AllowanceLesson2: Screen("allowancelesson2")
     object AllowanceLesson3: Screen("allowancelesson3")
@@ -19,6 +20,5 @@ sealed class Screen(val route: String){
     object AllowanceLesson7: Screen("allowancelesson7")
     object AllowanceLesson8: Screen("allowancelesson8")
     object AllowanceLesson9: Screen("allowancelesson9")
-    object AllowanceLesson10: Screen("allowancelesson10")
 }
 

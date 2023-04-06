@@ -3,5 +3,8 @@
     <string-array name="allowence_text1">
         <item>"hello"</item>
         <item>"hi"</item>
+        <item>"boo"</item>
+        <item>"muhaha"</item>
+        <item>"slay"</item>
     </string-array>
 </resources>

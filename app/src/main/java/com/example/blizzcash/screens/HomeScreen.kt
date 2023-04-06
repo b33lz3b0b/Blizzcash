@@ -33,7 +33,7 @@ private val user = auth.currentUser
 private var database = FirebaseDatabase.getInstance()
 private var ref: DatabaseReference = database.getReference("users").child(user!!.uid)
 
-var lessoncounter= 0
+var lessoncounter= 1
 var coursetype = ""
 var levelcounter = 0
 var scoresnumbers = IntArray(21){0}
