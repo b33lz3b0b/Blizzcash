@@ -112,7 +112,7 @@ fun HomeScreen(navController: NavHostController){
                         ),
                         modifier = Modifier.width(180.dp).height(240.dp)
                     ) {
-                        Text("Exp journal", style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center)
+                        Text("Lens", style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center)
                     }
                 }
             }
