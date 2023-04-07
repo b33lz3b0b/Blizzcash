@@ -140,7 +140,10 @@ fun CustomItem2(navController: NavController,model: CourseInfo, context: Context
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth()){
                     Button(enabled = model.unlocked, onClick={
-                        navController.navigate(route = "allowancelesson"+"$index")
+                        if(coursetype == "Allowance")
+                            navController.navigate(route = "allowancelesson"+"$index")
+                        /*else if(coursetype == "Salary")
+                            navController.navigate(route = "salarylesson"+"$index")*/
                     },
                         modifier = Modifier.width(110.dp),
                         colors = ButtonDefaults.buttonColors(

@@ -35,7 +35,7 @@ private val lessontexts : Array<Array<String>> = arrayOf(
     arrayOf("Rhonda prided herself on always taking the path less traveled. She'd decided to do this at an early age and had continued to do so throughout her entire life. It was a point of pride and she would explain to anyone who would listen that doing so was something that she'd made great efforts to always do. She'd never questioned this decision until her five-year-old niece asked her, \"So, is this why your life has been so difficult?\" and Rhonda didn't have an answer for her.",
         "It was difficult for him to admit he was wrong. He had been so certain that he was correct and the deeply held belief could never be shaken. Yet the proof that he had been incorrect stood right before his eyes. \"See daddy, I told you that they are real!\" his daughter excitedly proclaimed.",
         "She's asked the question so many times that she barely listened to the answers anymore. The answers were always the same. Well, not exactly the same, but the same in a general sense. A more accurate description was the answers never surprised her. So, she asked for the 10,000th time, \"What's your favorite animal?\" But this time was different. When she heard the young boy's answer, she wondered if she had heard him correctly.",
-    "The wolves stopped in their tracks, sizing up the mother and her cubs. It had been over a week since their last meal and they were getting desperate. The cubs would make a good meal, but there were high risks taking on the mother Grizzly. A decision had to be made and the wrong choice could signal the end of the pack."),
+        "The wolves stopped in their tracks, sizing up the mother and her cubs. It had been over a week since their last meal and they were getting desperate. The cubs would make a good meal, but there were high risks taking on the mother Grizzly. A decision had to be made and the wrong choice could signal the end of the pack."),
     arrayOf("Rhonda prided herself on always taking the path less traveled. She'd decided to do this at an early age and had continued to do so throughout her entire life. It was a point of pride and she would explain to anyone who would listen that doing so was something that she'd made great efforts to always do. She'd never questioned this decision until her five-year-old niece asked her, \"So, is this why your life has been so difficult?\" and Rhonda didn't have an answer for her.",
         "It was difficult for him to admit he was wrong. He had been so certain that he was correct and the deeply held belief could never be shaken. Yet the proof that he had been incorrect stood right before his eyes. \"See daddy, I told you that they are real!\" his daughter excitedly proclaimed.",
         "She's asked the question so many times that she barely listened to the answers anymore. The answers were always the same. Well, not exactly the same, but the same in a general sense. A more accurate description was the answers never surprised her. So, she asked for the 10,000th time, \"What's your favorite animal?\" But this time was different. When she heard the young boy's answer, she wondered if she had heard him correctly.",
@@ -47,7 +47,7 @@ private var database = FirebaseDatabase.getInstance()
 private var ref: DatabaseReference = database.getReference("users").child(auth.currentUser!!.uid)
 
 @Composable
-fun AllowanceLesson(navController: NavController, index: Int){
+fun SalaryLesson(navController: NavController, index: Int){
     var count by remember{ mutableStateOf(0) }
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberLazyListState()
@@ -58,7 +58,7 @@ fun AllowanceLesson(navController: NavController, index: Int){
             .fillMaxHeight()
             .background(MaterialTheme.colorScheme.background),
             horizontalAlignment = Alignment.CenterHorizontally
-            ){
+        ){
             Box(modifier= Modifier.fillMaxWidth()){
                 IconButton(onClick = {navController.navigate(route = Screen.Courses.route)},
                     modifier = Modifier
@@ -67,27 +67,27 @@ fun AllowanceLesson(navController: NavController, index: Int){
                     Icon(Icons.Filled.ArrowBack, contentDescription = "previous", tint = MaterialTheme.colorScheme.onBackground)
                 }
             }
-            Text(text = lessonListAllowance[index].name, color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.displayMedium)
+            Text(text = lessonListSalary[index].name, color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.displayMedium)
             Text(text = "Click to reveal more", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .alpha(if(count < lessontexts[index].size-1) 0.5f else 0f)
                     .padding(5.dp))
             LazyColumn(state = scrollState,
                 modifier = Modifier
-                .fillMaxWidth(0.9f)
-                .fillMaxHeight(0.9f)
-                .clickable(enabled = (count < lessontexts[index].size-1)) {
-                    coroutineScope.launch{
-                        scrollState.animateScrollToItem(index = count, scrollOffset = -100)
-                    }
-                    count++
-                },
+                    .fillMaxWidth(0.9f)
+                    .fillMaxHeight(0.9f)
+                    .clickable(enabled = (count < lessontexts[index].size-1)) {
+                        coroutineScope.launch{
+                            scrollState.animateScrollToItem(index = count, scrollOffset = -100)
+                        }
+                        count++
+                    },
                 horizontalAlignment = Alignment.CenterHorizontally){
-                    items(count = lessontexts[index].size){ i->
-                        Text(text = lessontexts[index][i], style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier
-                            .alpha(if(i<=count) 1f else 0f)
-                            .padding(10.dp))
-                    }
+                items(count = lessontexts[index].size){ i->
+                    Text(text = lessontexts[index][i], style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier
+                        .alpha(if(i<=count) 1f else 0f)
+                        .padding(10.dp))
+                }
             }
             Row(modifier = Modifier
                 .fillMaxWidth(),
@@ -123,9 +123,9 @@ fun AllowanceLesson(navController: NavController, index: Int){
                         listenerscourses()
                         navController.navigate(route = "course")
                     }, colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer),
-                    ){
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer),
+                ){
                     Text(text = "Finish", style = MaterialTheme.typography.labelMedium)
                 }
             }

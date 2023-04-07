@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.example.blizzcash.courses.AllowanceLesson
+import com.example.blizzcash.courses.SalaryLesson
 import com.example.blizzcash.screens.*
 
 @Composable
@@ -50,11 +51,11 @@ fun Navigation(navController: NavHostController){
                     AllowanceLesson(navController = navController, i)
                 }
             }
-            /*for(i in 0..19) {
+            for(i in 0..19) {
                 composable(route = "salarylesson"+"$i"){
                     SalaryLesson(navController = navController, i)
                 }
-            }*/
+            }
         }
     }
 }
