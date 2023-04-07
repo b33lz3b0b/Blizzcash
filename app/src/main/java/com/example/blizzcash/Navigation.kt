@@ -45,41 +45,16 @@ fun Navigation(navController: NavHostController){
             composable(route = Screen.Courses.route){
                 CoursesScreen(navController = navController)
             }
-            /*for(i in 1..10) {
+            for(i in 0..9) {
                 composable(route = "allowancelesson"+"$i"){
-                    AllowanceLesson(navController = navController, i-1)
+                    AllowanceLesson(navController = navController, i)
+                }
+            }
+            /*for(i in 0..19) {
+                composable(route = "salarylesson"+"$i"){
+                    SalaryLesson(navController = navController, i)
                 }
             }*/
-            composable(route = Screen.AllowanceLesson0.route) {
-                AllowanceLesson(navController = navController, 0)
-            }
-            composable(route = Screen.AllowanceLesson1.route) {
-                AllowanceLesson(navController = navController, 1)
-            }
-            composable(route = Screen.AllowanceLesson2.route) {
-                AllowanceLesson(navController = navController, 2)
-            }
-            composable(route = Screen.AllowanceLesson3.route) {
-                AllowanceLesson(navController = navController, 3)
-            }
-            composable(route = Screen.AllowanceLesson4.route) {
-                AllowanceLesson(navController = navController, 4)
-            }
-            composable(route = Screen.AllowanceLesson5.route) {
-                AllowanceLesson(navController = navController, 5)
-            }
-            composable(route = Screen.AllowanceLesson6.route) {
-                AllowanceLesson(navController = navController, 6)
-            }
-            composable(route = Screen.AllowanceLesson7.route) {
-                AllowanceLesson(navController = navController, 7)
-            }
-            composable(route = Screen.AllowanceLesson8.route) {
-                AllowanceLesson(navController = navController, 8)
-            }
-            composable(route = Screen.AllowanceLesson9.route) {
-                AllowanceLesson(navController = navController, 9)
-            }
         }
     }
 }

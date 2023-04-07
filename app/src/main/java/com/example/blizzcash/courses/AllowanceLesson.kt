@@ -6,6 +6,8 @@ import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -50,8 +52,8 @@ private var ref: DatabaseReference = database.getReference("users").child(auth.c
 fun AllowanceLesson(navController: NavController, index: Int){
     var count by remember{ mutableStateOf(0) }
     val coroutineScope = rememberCoroutineScope()
-    val scrollState = rememberScrollState()
-    var scrollToPosition  by remember { mutableStateOf(0F) }
+    val scrollState = rememberLazyListState()
+    //var scrollToPosition  by remember { mutableStateOf(0.0F) }
 
     MainAppTheme() {
         Column(modifier= Modifier
@@ -69,30 +71,26 @@ fun AllowanceLesson(navController: NavController, index: Int){
                 }
             }
             Text(text = lessonListAllowance[index].name, color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.displayMedium)
-            Column(modifier = Modifier
+            Text(text = "Click to reveal more", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier
+                    .alpha(if(count < lessontexts[index].size-1) 0.5f else 0f)
+                    .padding(5.dp))
+            LazyColumn(state = scrollState,
+                modifier = Modifier
                 .fillMaxWidth(0.9f)
                 .fillMaxHeight(0.9f)
-                .verticalScroll(rememberScrollState())
                 .clickable(enabled = (count < lessontexts[index].size-1)) {
-                    count++
                     coroutineScope.launch{
-                        scrollState.animateScrollTo(scrollToPosition.roundToInt())
+                        scrollState.animateScrollToItem(index = count, scrollOffset = -100)
                     }
+                    count++
                 },
-                horizontalAlignment = Alignment.CenterHorizontally
-            ){
-                Text(text = "Click to reveal more", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier
-                    .alpha(if(count < lessontexts[index].size-1) 0.5f else 0f))
-                for(i in 0 until lessontexts[index].size){
-                    Text(text = lessontexts[index][i], style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier
-                        .alpha(if(i<=count) 1f else 0f)
-                        .onGloballyPositioned { coordinates ->
-                            //if(i<=count)
-                                scrollToPosition = coordinates.positionInParent().y
-                        })
-                    Spacer(modifier = Modifier.fillMaxWidth().height(10.dp))
-                }
+                horizontalAlignment = Alignment.CenterHorizontally){
+                    items(count = lessontexts[index].size){ i->
+                        Text(text = lessontexts[index][i], style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier
+                            .alpha(if(i<=count) 1f else 0f)
+                            .padding(10.dp))
+                    }
             }
             Row(modifier = Modifier
                 .fillMaxWidth(),
