@@ -142,16 +142,22 @@ fun DragNDrop(prog: Int, i: Int) {
                             .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
                             .background(MaterialTheme.colorScheme.primaryContainer)
                             .pointerInput(Unit) {
-                                /*detectDragGestures(
+                                detectDragGestures(
                                     onDragStart = { touch ->
 
                                     },
-                                    OnDrag = { change, dragAmount ->
+                                    onDragEnd = {
+
+                                    },
+                                    onDragCancel = {
+
+                                    },
+                                    onDrag = { change, dragAmount ->
                                         change.consume()
                                         offsetX += dragAmount.x
                                         offsetY += dragAmount.y
                                     }
-                                )*/
+                                )
                             }
                     ){
                         Text(
