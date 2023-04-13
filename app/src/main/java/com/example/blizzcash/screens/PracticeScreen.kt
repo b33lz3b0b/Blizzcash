@@ -110,11 +110,11 @@ fun PracticeScreen(navController: NavController){
             ) {
                 if (coursetype == "Allowance")
                     itemsIndexed(levelListAllowance) { index , model ->
-                        CustomItem(model = model, contxt, index)
+                        CustomItem(navController,model = model, contxt, index)
                     }
                 else if (coursetype == "Salary")
                     itemsIndexed(levelListSalary) { index, model ->
-                        CustomItem(model = model, contxt, index)
+                        CustomItem(navController,model = model, contxt, index)
                     }
             }
         }
@@ -122,7 +122,7 @@ fun PracticeScreen(navController: NavController){
 }
 
 @Composable
-fun CustomItem(model: LevelInfo, context: Context, index: Int){
+fun CustomItem(navController: NavController,model: LevelInfo, context: Context, index: Int){
     MainAppTheme(){
         val txt = model.highscore
         Box(modifier = Modifier
@@ -146,7 +146,10 @@ fun CustomItem(model: LevelInfo, context: Context, index: Int){
                     modifier = Modifier.fillMaxWidth()){
                     Text("highscore:$txt/100",style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
                     Button(enabled = model.unlocked, onClick={
-                         if(!(model.unlocked)) Toast.makeText(context, "Progress on lessons needed", Toast.LENGTH_SHORT).show()
+                         if(coursetype == "Allowance")
+                             navController.navigate(route = "allowancelevel"+"$index")
+                        /*else if(coursetype == "Salary")
+                            navController.navigate(route = "salarylevel"+"$index")*/
                     },
                         modifier = Modifier.width(110.dp),
                         colors = ButtonDefaults.buttonColors(

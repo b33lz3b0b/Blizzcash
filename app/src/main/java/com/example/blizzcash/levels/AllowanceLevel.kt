@@ -1,18 +1,20 @@
 package com.example.blizzcash.levels
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.IconToggleButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -21,15 +23,22 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.*
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.blizzcash.Screen
 import com.example.blizzcash.theme.MainAppTheme
-import com.google.android.gms.maps.model.Circle
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 private val questions1: Array<Array<String>> = arrayOf(
@@ -68,7 +77,7 @@ private val buttontext = mutableStateOf("Continue")
 
 @Composable
 fun AllowanceLevel(navController: NavController, index: Int){
-    val prog by remember {mutableStateOf(0)}
+    var prog by remember {mutableStateOf(0)}
     val scorenow by remember {mutableStateOf(0)}
     MainAppTheme() {
         Column(
@@ -76,7 +85,8 @@ fun AllowanceLevel(navController: NavController, index: Int){
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .background(MaterialTheme.colorScheme.background),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -101,12 +111,13 @@ fun AllowanceLevel(navController: NavController, index: Int){
             when (prog) {
                 0 -> ChooseCorrectAnswer(prog,index)
                 1 -> ChooseCorrectAnswer(prog,index)
-                2 -> DragNDrop(prog,index)
-                3 -> DragNDrop(prog,index)
-                4 -> DragLines(prog,index)
+                2 -> DragNDrop(prog-2,index)
+                3 -> DragNDrop(prog-2,index)
+                4 -> DragLines(prog-4,index)
             }
             Box(modifier = Modifier.fillMaxWidth()){
-                Button(onClick = { CheckAnswers() }, modifier = Modifier.align(Alignment.CenterEnd),
+                Button(onClick = { CheckAnswers()
+                    prog++}, modifier = Modifier.align(Alignment.CenterEnd),
                     colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -125,47 +136,61 @@ fun DragLines(prog: Int, i: Int) {
 
 @Composable
 fun DragNDrop(prog: Int, i: Int) {
-    MainAppTheme() {
-        val selectedValue = remember { mutableStateOf("") }
-        Box(modifier = Modifier.fillMaxSize()){
-            var offsetX by remember { mutableStateOf(0f) }
-            var offsetY by remember { mutableStateOf(0f) }
-            Column(Modifier.padding(8.dp)) {
-                Row(modifier = Modifier.fillMaxWidth()){
-                    Text(text = questions1[i][2*prog],style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier.padding(2.dp))
-                    Box(modifier = Modifier.fillMaxHeight().background(MaterialTheme.colorScheme.surfaceVariant).width(5.dp))
-                    Text(text = questions1[i][2*prog+1],style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier.padding(2.dp))
+    val textcomp = remember { mutableStateOf("") }
+    MaterialTheme(){
+        /*------------------------------------------------------------------*/
+        val dividerId = "inlineDividerId"
+        val text = buildAnnotatedString {
+            append(AnnotatedString(questions2[i][2*prog], spanStyle = SpanStyle(MaterialTheme.colorScheme.onBackground)))
+
+            appendInlineContent(dividerId, "[divider]")
+
+            append(AnnotatedString(questions2[i][2*prog+1], spanStyle = SpanStyle(MaterialTheme.colorScheme.onBackground)))
+
+        }
+        /*-------------------------------------------------------------------*/
+        val inlineDividerContent = mapOf(
+            Pair(
+                dividerId,
+                InlineTextContent(
+                    Placeholder(
+                        placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
+                        height = 35.sp,
+                        width = 200.sp
+                    )
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .clip(RectangleShape)
+                            .background(MaterialTheme.colorScheme.onBackground)
+                            .padding(5.dp)
+                    ){
+                        Text(text = textcomp.value, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.background)
+                    }
                 }
+            )
+        )
+        /*-----------------------------------------------------------------------*/
+        Box(modifier = Modifier.fillMaxWidth()){
+            Column(Modifier.padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally) {
+                BasicText(text = text, inlineContent = inlineDividerContent, style = MaterialTheme.typography.titleMedium)
                 options2[i][prog].forEach { item ->
                     Box(
                         Modifier
-                            .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
                             .background(MaterialTheme.colorScheme.primaryContainer)
-                            .pointerInput(Unit) {
-                                detectDragGestures(
-                                    onDragStart = { touch ->
-
-                                    },
-                                    onDragEnd = {
-
-                                    },
-                                    onDragCancel = {
-
-                                    },
-                                    onDrag = { change, dragAmount ->
-                                        change.consume()
-                                        offsetX += dragAmount.x
-                                        offsetY += dragAmount.y
-                                    }
-                                )
+                            .clickable{
+                                textcomp.value = item
                             }
                     ){
                         Text(
                             text = item,
-                            modifier = Modifier.fillMaxWidth(),
-                            style = MaterialTheme.typography.labelMedium
+                            modifier = Modifier.padding(2.dp),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     }
+                    Spacer(modifier = Modifier.height(10.dp))
                 }
             }
         }
@@ -177,7 +202,7 @@ fun ChooseCorrectAnswer(prog: Int, i: Int) {
     MainAppTheme() {
         val selectedValue = remember { mutableStateOf("") }
         Column(Modifier.padding(8.dp)) {
-            Text(text = questions1[i][prog],style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier.padding(5.dp))
+            Text(text = questions1[i][prog],style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier.padding(5.dp))
             options1[i][prog].forEach { item ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -185,19 +210,19 @@ fun ChooseCorrectAnswer(prog: Int, i: Int) {
                         selected = (selectedValue.value == item),
                         onClick = { selectedValue.value = item },
                         role = Role.RadioButton
-                    ).padding(3.dp)
+                    ).padding(10.dp)
                 ) {
                     IconToggleButton(
                         checked = selectedValue.value == item,
                         onCheckedChange = { selectedValue.value = item },
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(56.dp)
                     ){
                         Icon(
-                                if (selectedValue.value == item) {
-                                    Icons.Filled.CheckCircle
-                                } else {
-                                    Icons.Outlined.CheckCircle
-                                }
+                            if (selectedValue.value == item) {
+                                Icons.Filled.CheckCircle
+                            } else {
+                                Icons.Outlined.CheckCircle
+                            }
                             ,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onBackground
@@ -206,13 +231,15 @@ fun ChooseCorrectAnswer(prog: Int, i: Int) {
                     Text(
                         text = item,
                         modifier = Modifier.fillMaxWidth(),
-                        style = MaterialTheme.typography.labelMedium
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 }
             }
         }
     }
 }
+
 
 fun CheckAnswers(){
 

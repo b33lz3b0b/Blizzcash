@@ -2,12 +2,14 @@ package com.example.blizzcash
 
 
 import androidx.compose.runtime.*
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.example.blizzcash.courses.AllowanceLesson
 import com.example.blizzcash.courses.SalaryLesson
+import com.example.blizzcash.levels.AllowanceLevel
 import com.example.blizzcash.screens.*
 
 @Composable
@@ -56,6 +58,24 @@ fun Navigation(navController: NavHostController){
                     SalaryLesson(navController = navController, i)
                 }
             }
+        }
+        navigation(
+            startDestination = Screen.Courses.route,
+            route = "level"
+        ){
+            composable(route = Screen.Practice.route){
+                PracticeScreen(navController = navController)
+            }
+            for(i in 0..9) {
+                composable(route = "allowancelevel"+"$i"){
+                    AllowanceLevel(navController = navController, i)
+                }
+            }
+            /*for(i in 0..19) {
+                composable(route = "salarylesson"+"$i"){
+                    SalaryLesson(navController = navController, i)
+                }
+            }*/
         }
     }
 }

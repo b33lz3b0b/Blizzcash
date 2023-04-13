@@ -142,8 +142,8 @@ fun CustomItem2(navController: NavController,model: CourseInfo, context: Context
                     Button(enabled = model.unlocked, onClick={
                         if(coursetype == "Allowance")
                             navController.navigate(route = "allowancelesson"+"$index")
-                        /*else if(coursetype == "Salary")
-                            navController.navigate(route = "salarylesson"+"$index")*/
+                        else if(coursetype == "Salary")
+                            navController.navigate(route = "salarylesson"+"$index")
                     },
                         modifier = Modifier.width(110.dp),
                         colors = ButtonDefaults.buttonColors(
