@@ -146,10 +146,11 @@ fun CustomItem(navController: NavController,model: LevelInfo, context: Context, 
                     modifier = Modifier.fillMaxWidth()){
                     Text("highscore:$txt/100",style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
                     Button(enabled = model.unlocked, onClick={
+                        listenerscores()
                          if(coursetype == "Allowance")
                              navController.navigate(route = "allowancelevel"+"$index")
-                        /*else if(coursetype == "Salary")
-                            navController.navigate(route = "salarylevel"+"$index")*/
+                        else if(coursetype == "Salary")
+                            navController.navigate(route = "salarylevel"+"$index")
                     },
                         modifier = Modifier.width(110.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -166,6 +167,20 @@ fun CustomItem(navController: NavController,model: LevelInfo, context: Context, 
             }
         }
     }
-
 }
 
+fun listenerscores(){
+    val scoresListener = object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            // Get Post object and use the values to update the UI
+            for(i in 0..19)
+                scoresnumbers[i] = (dataSnapshot.child("scores").child("$i").value as Long).toInt()
+            //Log.d(TAG, "$lessoncounter")
+        }
+        override fun onCancelled(databaseError: DatabaseError) {
+            // Getting Post failed, log a message
+            Log.w(ContentValues.TAG, "load:onCancelled", databaseError.toException())
+        }
+    }
+    ref.addValueEventListener(scoresListener)
+}

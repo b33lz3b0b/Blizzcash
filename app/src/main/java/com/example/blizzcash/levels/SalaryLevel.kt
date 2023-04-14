@@ -71,7 +71,7 @@ private var database = FirebaseDatabase.getInstance()
 private var ref: DatabaseReference = database.getReference("users").child(auth.currentUser!!.uid)
 
 @Composable
-fun AllowanceLevel(navController: NavController, index: Int){
+fun SalaryLevel(navController: NavController, index: Int){
     var prog by remember {mutableStateOf(0)}
     val contxt = LocalContext.current
     MainAppTheme() {
@@ -107,24 +107,24 @@ fun AllowanceLevel(navController: NavController, index: Int){
                 )
             }
             when (prog) {
-                0 -> ChooseCorrectAnswer(prog,index)
-                1 -> ChooseCorrectAnswer(prog,index)
-                2 -> ChooseCorrectAnswer(prog,index)
-                3 -> ChooseCorrectAnswer(prog,index)
-                4 -> FinalScreen(index)
+                0 -> ChooseCorrectAnswer2(prog,index)
+                1 -> ChooseCorrectAnswer2(prog,index)
+                2 -> ChooseCorrectAnswer2(prog,index)
+                3 -> ChooseCorrectAnswer2(prog,index)
+                4 -> FinalScreen2(index)
             }
             Box(modifier = Modifier.fillMaxWidth()){
                 Button(onClick = {
                     if(prog==3) buttontext.value = "Finish"
                     if(prog==4) {
-                        LevelFinale(index,navController)}
-                    else{CheckAnswers(prog,index)
+                        LevelFinale2(index,navController)}
+                    else{CheckAnswers2(prog,index)
                         prog++}
-                    }, modifier = Modifier.align(Alignment.CenterEnd).padding(start = 0.dp, top = 0.dp, end = 20.dp, bottom = 20.dp),
+                }, modifier = Modifier.align(Alignment.CenterEnd).padding(start = 0.dp, top = 0.dp, end = 20.dp, bottom = 20.dp),
                     colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                )){
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    )){
                     Text(text = buttontext.value, style = MaterialTheme.typography.labelMedium)
                 }
             }
@@ -133,7 +133,7 @@ fun AllowanceLevel(navController: NavController, index: Int){
 }
 
 @Composable
-fun FinalScreen(index: Int) {
+fun FinalScreen2(index: Int) {
     Column(Modifier.padding(8.dp).fillMaxWidth(0.9f),
         horizontalAlignment = Alignment.CenterHorizontally){
         Text(text="score: " + scorenow.value + "/100",style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier.padding(5.dp))
@@ -141,7 +141,7 @@ fun FinalScreen(index: Int) {
     }
 }
 
-fun LevelFinale(i: Int, navController: NavController) {
+fun LevelFinale2(i: Int, navController: NavController) {
     if(scoresnumbers[i] < scorenow.value){
         ref.child("scores").child("$i").setValue(scorenow.value).addOnCompleteListener(){ task ->
             if(task.isSuccessful){
@@ -156,9 +156,8 @@ fun LevelFinale(i: Int, navController: NavController) {
     navController.navigate(route = "level")
 }
 
-
 @Composable
-fun ChooseCorrectAnswer(prog: Int, i: Int) {
+fun ChooseCorrectAnswer2(prog: Int, i: Int) {
     MainAppTheme() {
         val selectedValue = remember { mutableStateOf("") }
         Column(Modifier.padding(8.dp).fillMaxWidth(0.9f),
@@ -202,53 +201,9 @@ fun ChooseCorrectAnswer(prog: Int, i: Int) {
     }
 }
 
-
-fun CheckAnswers(prog: Int, i : Int){
+fun CheckAnswers2(prog: Int, i : Int){
     if(input == solutions[i][prog]){
         scorenow.value += 25
     }
     input = ""
-}
-@Composable
-fun DialogLevel(onDismiss: () -> Unit, navController: NavController, context: Context) {
-    MainAppTheme() {
-        AlertDialog(
-            onDismissRequest = { onDismiss() },
-            title = {
-                Text("Exit level?", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onBackground)
-            },
-            confirmButton = {
-                androidx.compose.material.Button(
-                    onClick = {
-                        input = ""
-                        onDismiss()
-                        navController.navigate(route = "level")
-                    },
-                    colors = androidx.compose.material.ButtonDefaults.buttonColors(
-                        backgroundColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                ) {
-                    Text("Yes")
-                }
-            },
-            dismissButton = {
-                androidx.compose.material.Button(
-                    onClick = {
-                        onDismiss()
-                    },
-                    colors = androidx.compose.material.ButtonDefaults.buttonColors(
-                        backgroundColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                ) {
-                    Text("No")
-                }
-            },
-            text = {
-                Text("If you exit now, all your current progress will be lost.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary)
-            }
-        )
-    }
-
 }

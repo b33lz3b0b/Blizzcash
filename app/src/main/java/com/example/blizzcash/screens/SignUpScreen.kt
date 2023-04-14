@@ -217,7 +217,7 @@ fun DialogDemo(onDismiss: () -> Unit, email: String, password: String, navContro
             AlertDialog(
                 onDismissRequest = { onDismiss() },
                 title = {
-                    Text("Wrong password", color = MaterialTheme.colorScheme.onBackground)
+                    Text("Wrong password", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onBackground)
                 },
                 confirmButton = {
                     Button(
@@ -233,7 +233,7 @@ fun DialogDemo(onDismiss: () -> Unit, email: String, password: String, navContro
                     }
                 },
                 text = {
-                    Text("There is an account with this email, but the password seems to be incorrect. Please try again.", color = MaterialTheme.colorScheme.primary)
+                    Text("There is an account with this email, but the password seems to be incorrect. Please try again.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary)
                 }
             )
         }
@@ -244,7 +244,7 @@ fun DialogDemo(onDismiss: () -> Unit, email: String, password: String, navContro
             AlertDialog(
                 onDismissRequest = {onDismiss()},
                 title = {
-                    Text("Nonexistent account", color = MaterialTheme.colorScheme.onBackground)
+                    Text("Nonexistent account", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onBackground)
                 },
                 confirmButton = {
                     Button(
@@ -274,7 +274,7 @@ fun DialogDemo(onDismiss: () -> Unit, email: String, password: String, navContro
                     }
                 },
                 text = {
-                    Text("There isn't any existing account with this email. Would you like so sign up?", color = MaterialTheme.colorScheme.onBackground)
+                    Text("There isn't any existing account with this email. Would you like so sign up?", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onBackground)
                 }
             )
         }
