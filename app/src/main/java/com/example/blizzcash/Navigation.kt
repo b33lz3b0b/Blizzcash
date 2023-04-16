@@ -78,5 +78,8 @@ fun Navigation(navController: NavHostController){
                 }
             }
         }
+        composable(route = Screen.Lens.route){
+            LensScreen(navController = navController)
+        }
     }
 }

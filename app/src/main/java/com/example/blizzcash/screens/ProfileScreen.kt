@@ -46,7 +46,7 @@ private var auth: FirebaseAuth = Firebase.auth
 private var database = FirebaseDatabase.getInstance()
 private var ref: DatabaseReference = database.getReference("users").child(auth.currentUser!!.uid)
 
-private val PfpArray = intArrayOf(
+val PfpArray = intArrayOf(
     R.drawable.pfp_1,
     R.drawable.pfp_2,
     R.drawable.pfp_3
@@ -79,9 +79,6 @@ fun ProfileScreen(navController: NavHostController){
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically){
-                /*TextButton(onClick = {if(flag>0) flag-- else flag = 2}, enabled = enabledPrev) {
-                    Text(text = "previous",color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.labelLarge)
-                }*/
                 IconButton(onClick = {if(flag>0) flag-- else flag = 2}, enabled = enabledPrev){
                     Icon(Icons.Filled.ArrowBack, contentDescription = "previous", tint = MaterialTheme.colorScheme.onBackground)
                 }
@@ -106,9 +103,6 @@ fun ProfileScreen(navController: NavHostController){
                             )
                     )
                 }
-                /*TextButton(onClick = {if(flag<2) flag++ else flag = 0}, enabled = enabledNext) {
-                    Text(text = "next",color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.labelLarge)
-                }*/
                 IconButton(onClick = {if(flag<2) flag++ else flag = 0}, enabled = enabledNext){
                     Icon(Icons.Filled.ArrowForward, contentDescription = "next", tint = MaterialTheme.colorScheme.onBackground)
                 }

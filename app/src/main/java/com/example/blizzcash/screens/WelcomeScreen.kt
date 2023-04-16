@@ -2,6 +2,7 @@ package com.example.blizzcash.screens
 
 import android.content.ContentValues.TAG
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
@@ -12,10 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.example.blizzcash.R
 import com.example.blizzcash.Screen
 import com.example.blizzcash.theme.MainAppTheme
 import com.google.firebase.auth.FirebaseAuth
@@ -40,9 +43,10 @@ fun WelcomeScreen(navController: NavHostController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ){
+            Image(painter = painterResource(id = R.drawable.blizzcash_logo),
+                contentDescription = null,
+                modifier = Modifier.size(280.dp))
             if (user != null) {
-                //var ref: DatabaseReference = database.getReference("users").child(user!!.uid)
-                //listenername()
                 WelcomeText("Welcome back")
                 Spacer(modifier = Modifier.height(20.dp))
                 WelcomeButton(navController, "Continue")
@@ -68,7 +72,7 @@ fun WelcomeButton(navController: NavController, next:String) {
             } },
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer, contentColor = MaterialTheme.colorScheme.onPrimaryContainer)
         ){
-            Text(next)
+            Text(next, style = MaterialTheme.typography.labelLarge)
         }
     }
 

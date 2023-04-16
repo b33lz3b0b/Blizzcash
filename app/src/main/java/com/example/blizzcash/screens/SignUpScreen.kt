@@ -30,6 +30,12 @@ import com.example.blizzcash.Information1
 import com.example.blizzcash.Screen
 import com.example.blizzcash.theme.MainAppTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
+import com.example.blizzcash.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
@@ -42,12 +48,14 @@ private var database = FirebaseDatabase.getInstance()
 private var ref: DatabaseReference = database.getReference("users")
 private var verif = mutableStateOf(0)
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SignUpScreen(navController: NavHostController) {
     var email: TextFieldValue by remember { mutableStateOf(TextFieldValue("")) }
     var password: TextFieldValue by remember { mutableStateOf(TextFieldValue("")) }
     val contxt = LocalContext.current
     val focusManager = LocalFocusManager.current
+    var focusRequester = remember { FocusRequester() }
     MainAppTheme() {
         Column( modifier = Modifier
             .fillMaxHeight()
@@ -61,17 +69,22 @@ fun SignUpScreen(navController: NavHostController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ){
+
             OutlinedTextField(
                 value = email,
                 label = { Text(text = "E-mail", style = MaterialTheme.typography.labelLarge) },
                 placeholder = { Text(text = "Enter E-mail", style = MaterialTheme.typography.labelLarge) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next),
                 onValueChange = {
                     email = it
                 },
                 keyboardActions = KeyboardActions(
                     onDone = {
                         focusManager.clearFocus()
+                    },
+                    onNext = {
+                        focusManager.moveFocus(FocusDirection.Down)
                     }
                 ),
                 maxLines = 1,
@@ -94,13 +107,17 @@ fun SignUpScreen(navController: NavHostController) {
                 value = password,
                 label = { Text(text = "Password", style = MaterialTheme.typography.labelLarge) },
                 placeholder = { Text(text = "Enter Password", style = MaterialTheme.typography.labelLarge) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Next),
                 onValueChange = {
                     password = it
                 },
                 keyboardActions = KeyboardActions(
                     onDone = {
                         focusManager.clearFocus()
+                    },
+                    onNext = {
+                        focusManager.moveFocus(FocusDirection.Down)
                     }
                 ),
                 maxLines = 1,

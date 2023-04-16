@@ -3,18 +3,33 @@ package com.example.blizzcash.screens
 import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,6 +52,7 @@ var lessoncounter= 1
 var coursetype = ""
 var levelcounter = 0
 var scoresnumbers = IntArray(21){0}
+var pfp = mutableStateOf(0)
 
 @Composable
 fun HomeScreen(navController: NavHostController){
@@ -47,6 +63,9 @@ fun HomeScreen(navController: NavHostController){
     listenerscourses()
     updateflowcourses()
     listenername()
+    listenerspfp()
+
+    val visible by remember { mutableStateOf(true) }
 
     MainAppTheme() {
         Column(modifier= Modifier
@@ -62,12 +81,34 @@ fun HomeScreen(navController: NavHostController){
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
-            Column(modifier=Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally){
-                Text(text = "hello,", color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.displaySmall, )
-                Text(text = usernamename, color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.displaySmall)
-                //Text(text = quotes[Random.nextInt(0,2)], color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.displaySmall)
+            AnimatedVisibility(
+                visible = visible,
+                enter = slideInHorizontally(animationSpec = tween(durationMillis = 200)){  fullWidth -> -fullWidth / 2} + fadeIn(animationSpec = tween(durationMillis = 200))
+            ){
+                Row(modifier = Modifier.fillMaxWidth().padding(15.dp),
+                    verticalAlignment = Alignment.CenterVertically){
+                    Image(
+                        painterResource(PfpArray[pfp.value]),
+                        contentDescription = "pfp",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(123.dp)
+                            .clip(CircleShape)
+                            .background(color = MaterialTheme.colorScheme.onBackground)
+                            .border(
+                                BorderStroke(2.dp, MaterialTheme.colorScheme.onBackground),
+                                CircleShape
+                            )
+                    )
+                    Column(modifier=Modifier.fillMaxWidth().padding(15.dp),
+                        horizontalAlignment = Alignment.Start){
+                        Text(text = "hello,", color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.displaySmall, )
+                        Text(text = usernamename, color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.displaySmall)
+                    }
+                }
             }
+
+
             Spacer(modifier = Modifier.height(40.dp))
             Column(modifier=Modifier.fillMaxWidth().height(500.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -96,16 +137,7 @@ fun HomeScreen(navController: NavHostController){
                 }
                 Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround){
-                    Button(onClick = { /*TODO*/ },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                        ),
-                        modifier = Modifier.width(180.dp).height(240.dp)
-                    ) {
-                        Text("Apply your skills", style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center)
-                    }
-                    Button(onClick = { /*TODO*/ },
+                    Button(onClick = { navController.navigate(route = Screen.Lens.route)  },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
                             contentColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -157,6 +189,20 @@ fun listenerslevels(){
         }
     }
     ref.addValueEventListener(practiceListener)
+}
+
+fun listenerspfp(){
+    val pfpListener = object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            // Get Post object and use the values to update the UI
+            pfp.value = (dataSnapshot.child("pfp").value as Long).toInt()
+        }
+        override fun onCancelled(databaseError: DatabaseError) {
+            // Getting Post failed, log a message
+            Log.w(ContentValues.TAG, "load:onCancelled", databaseError.toException())
+        }
+    }
+    ref.addValueEventListener(pfpListener)
 }
 
 fun updateflowlevels(){
