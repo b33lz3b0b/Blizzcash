@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -71,9 +72,17 @@ fun HomeScreen(navController: NavHostController){
         Column(modifier= Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(MaterialTheme.colorScheme.background)){
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        MaterialTheme.colorScheme.background,
+                        MaterialTheme.colorScheme.errorContainer
+                    )
+                )
+            )
+        ){
             Box(modifier=Modifier.fillMaxWidth()){
-                IconButton( onClick = {},
+                IconButton( onClick = {navController.navigate(route = Screen.Settings.route)},
                     modifier = Modifier
                         .align(Alignment.TopStart),
                 ){
@@ -122,7 +131,7 @@ fun HomeScreen(navController: NavHostController){
                         ),
                         modifier = Modifier.width(180.dp).height(240.dp)
                     ) {
-                        Text("Course", style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center)
+                        Text("Course", style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
                     }
                     Button(onClick = { navController.navigate(route = "practice")  },
                         colors = ButtonDefaults.buttonColors(
@@ -132,7 +141,7 @@ fun HomeScreen(navController: NavHostController){
                         modifier = Modifier.width(180.dp).height(240.dp),
 
                     ) {
-                        Text("Practice", style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center)
+                        Text("Practice", style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
                     }
                 }
                 Row(modifier = Modifier.fillMaxWidth(),
@@ -144,16 +153,12 @@ fun HomeScreen(navController: NavHostController){
                         ),
                         modifier = Modifier.width(180.dp).height(240.dp)
                     ) {
-                        Text("Lens", style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center)
+                        Text("Lens", style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
                     }
                 }
             }
-            Spacer(modifier = Modifier.height(20.dp))
-            Button(onClick={
-                auth.signOut()
-            }){
-                Text(text="Sign out")
-            }
+
+
         }
     }
 

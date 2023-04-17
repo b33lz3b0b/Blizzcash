@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -34,16 +35,16 @@ import com.google.firebase.ktx.Firebase
 
 data class CourseInfo(val name:String, val desc:String, var unlocked:Boolean)
 var lessonListAllowance = mutableListOf<CourseInfo>(
-    CourseInfo("Lesson 1", "Desc1", false),
-    CourseInfo("Lesson 2", "Desc2", false),
-    CourseInfo("Lesson 3", "Desc3", false),
-    CourseInfo("Lesson 4", "Desc4", false),
-    CourseInfo("Lesson 5", "Desc5", false),
-    CourseInfo("Lesson 6", "Desc6", false),
+    CourseInfo("Lesson 1", "Saving money as a teenager", false),
+    CourseInfo("Lesson 2", "Investing as a teenager", false),
+    CourseInfo("Lesson 3", "Earning money as a teenager", false),
+    CourseInfo("Lesson 4", "Why do teenagers waste money", false),
+    CourseInfo("Lesson 5", "Credit card", false),
+    /*CourseInfo("Lesson 6", "Desc6", false),
     CourseInfo("Lesson 7", "Desc7", false),
     CourseInfo("Lesson 8", "Desc8", false),
     CourseInfo("Lesson 9","Desc9", false),
-    CourseInfo("Lesson 10", "Desc10", false)
+    CourseInfo("Lesson 10", "Desc10", false)*/
 )
 
 var lessonListSalary = mutableListOf<CourseInfo>(
@@ -86,7 +87,8 @@ fun CoursesScreen(navController: NavController){
         Column(modifier= Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(MaterialTheme.colorScheme.background)){
+            .background(MaterialTheme.colorScheme.errorContainer),
+        horizontalAlignment = Alignment.CenterHorizontally){
             Box(modifier=Modifier.fillMaxWidth()){
                 IconButton(onClick = {navController.navigate(route = Screen.Home.route)},
                     modifier = Modifier
@@ -100,7 +102,7 @@ fun CoursesScreen(navController: NavController){
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally ,
                 modifier = Modifier
-                    .background(MaterialTheme.colorScheme.background)
+                    .background(MaterialTheme.colorScheme.errorContainer)
                     .fillMaxSize()
             ){
                 if(coursetype == "Allowance")
@@ -112,6 +114,14 @@ fun CoursesScreen(navController: NavController){
                         CustomItem2(navController,model = model, contxt, index)
                     }
             }
+            Text(
+                text = "More material soon to be added",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier
+                    .alpha(0.5f)
+                    .padding(5.dp)
+            )
         }
 
     }
@@ -147,7 +157,7 @@ fun CustomItem2(navController: NavController,model: CourseInfo, context: Context
                     },
                         modifier = Modifier.width(110.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            containerColor = MaterialTheme.colorScheme.surface,
                             contentColor = MaterialTheme.colorScheme.onSurface
                         )){
                         if(model.unlocked)

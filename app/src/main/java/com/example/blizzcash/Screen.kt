@@ -11,6 +11,7 @@ sealed class Screen(val route: String){
     object Practice: Screen("practice_screen")
     object Courses: Screen("courses_screen")
     object Lens: Screen("lens_screen")
+    object Settings : Screen("settings_screen")
     /*------------------------------------------------------------*/
     object AllowanceLesson0: Screen("allowancelesson0")
     object AllowanceLesson1: Screen("allowancelesson1")

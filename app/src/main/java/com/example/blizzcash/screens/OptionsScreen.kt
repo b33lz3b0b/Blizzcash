@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -36,7 +37,12 @@ fun OptionsScreen(navController: NavHostController) {
         Column( modifier = Modifier
             .fillMaxHeight()
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background),
+            .background(brush = Brush.verticalGradient(
+                colors = listOf(
+                    MaterialTheme.colorScheme.errorContainer,
+                    MaterialTheme.colorScheme.background
+                )
+            )),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ){
@@ -77,7 +83,7 @@ fun SelectCourseButton(course_type: String, navController: NavController, enable
         ),
         modifier = Modifier.height(150.dp).width(350.dp),
     ){
-        Text(course_type, style = MaterialTheme.typography.bodyMedium)
+        Text(course_type, style = MaterialTheme.typography.titleMedium)
     }
 }
 

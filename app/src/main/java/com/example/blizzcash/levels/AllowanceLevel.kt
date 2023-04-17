@@ -35,28 +35,157 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 
 private val questions: Array<Array<String>> = arrayOf(
-    arrayOf("question1","question2","question3","question4"),
-    arrayOf("question1","question2","question3","question4"),
-    arrayOf("question1","question2","question3","question4"),
-    arrayOf("question1","question2","question3","question4")
+    arrayOf("At what age can you open a savings account?",
+        "Which one is an affordable gift that would save you money?",
+        "Which one isn't a priority when you spend money from your budget? ",
+        "Which one is a bad habit when shopping online?"),
+    arrayOf("What is an investment?",
+        "What is a stock?",
+        "Why is it important to start investing as a teenager?",
+        "What is the importance of diversification in investing?"),
+    arrayOf("Which one isn't one of the ways for a teenager to earn money?",
+        "Which one isn't one of the ways for a teenager to earn money?",
+        "At what age can you get a part-time job?",
+        "If a typical teenager intends to tutor online, what can they teach?"),
+    arrayOf("How should a teenager spend their pocket money?",
+        "What is a usual useless purchase teenagers make?",
+        "How should pocket money be managed?",
+        "In which instance the purchase is justified?"),
+    arrayOf("What is the purpose of a credit card?",
+        "What is a credit limit?",
+        "What is a late payment fee?",
+        "What is a cash advance on a credit card?")
 )
 
 
 private val options: Array<Array<Array<String>>> = arrayOf(
     arrayOf(
-        arrayOf("option1","option2","option3","option4"),
-        arrayOf("option1","option2","option3","option4"),
-        arrayOf("option1","option2","option3","option4"),
-        arrayOf("option1","option2","option3","option4")
+        arrayOf("Over 18 years old",
+            "Any age, without need of parental assistance",
+            "Over 16 years old, with parental approval",
+            "At any age as long as it is joint with a parent's account"),
+        arrayOf("Silver jewellery",
+            "Computer accessory",
+            "Handmade gift",
+            "Brand clothing"),
+        arrayOf("School supplies",
+            "Figurines",
+            "Groceries for dinner",
+            "Clothes for PE class"),
+        arrayOf("Using coupons",
+            "Finding a trusted website with the best discount",
+            "Immediately buying what catches your eye",
+            "Making a wishlist until you think you can afford buying something")
     ),
     arrayOf(
-        arrayOf("option1","option2","option3","option4"),
-        arrayOf("option1","option2","option3","option4")
+        arrayOf("A way to earn money",
+            "A way to spend money",
+            "A way to save money",
+            "A way to borrow money"),
+        arrayOf("A type of fruit",
+            "A type of investment that represents ownership in a company",
+            "A type of clothing item",
+            "A type of musical instrument"),
+        arrayOf("Because you'll have more money to spend",
+            "Because it can help you reach your financial goals in the future",
+            "Because it's required by law",
+            "Because your friends are doing it"
+        ),
+        arrayOf("It helps to reduce risk by spreading investments across multiple assets and sectors",
+            "It guarantees a higher rate of return",
+            "It ensures that all investments will perform well",
+            "It is not important in investing"
+        )
+    ),
+    arrayOf(
+        arrayOf("Competitions with money prizes",
+            "Part-time job",
+            "Selling things on platforms such as Etsy",
+            "Full-time job"),
+        arrayOf("Surveys",
+            "Social media creator's fund",
+            "Video game tester",
+            "All of the above"),
+        arrayOf("16 years old",
+            "13 years old",
+            "15 years old",
+            "Depends with each country"
+        ),
+        arrayOf("Advanced astrophysics",
+            "Arts and crafts",
+            "Music masterclass",
+            "Professional writing tips"
+        )
+    ),
+    arrayOf(
+            arrayOf("Small purchases frequently",
+                "Large purchases rarely",
+                "Purchases when necessary, small or big",
+                "Regular purchases of any kind"
+            ),
+            arrayOf("Daily coffee",
+                "Snacks for lunch break",
+                "Digital courses",
+                "Occasional cultural events"
+            ),
+            arrayOf("Impulsive purchases",
+                "Buying what is in trend",
+                "Manage your budget and make a goal",
+                "Purchase on behalf of others"
+            ),
+            arrayOf("The newest gaming console launched",
+                "There is a new coffee mix at the caffe in centre",
+                "The teacher wants to work on a new workbook",
+                "Favourite youtuber launched overpriced merch"
+            ),
+
+    ),
+    arrayOf(
+        arrayOf("To borrow money and pay it back over time",
+            "To earn rewards and cash back on purchases",
+            "To avoid carrying cash or checks",
+            "To increase your credit score"
+        ),
+        arrayOf("The maximum amount of money you can borrow on your credit card",
+            "The minimum amount of money you have to spend each month on your credit card",
+            "The interest rate charged on purchases made with your credit card",
+            "The fee charged for using your credit card overseas"
+        ),
+        arrayOf("A fee charged if you don't make at least the minimum payment on your credit card by the due date",
+            "A fee charged if you make a payment early",
+            "A fee charged if you make a payment over the phone",
+            "A fee charged if you use your credit card to withdraw cash from an ATM"
+        ),
+        arrayOf("Withdrawing cash from an ATM using your credit card",
+            "Paying off your credit card balance in full each month",
+            "Earning cash back rewards for making purchases with your credit card",
+            "Getting a loan from a bank using your credit card as collateral"
+        ),
+
     )
 )
 
 private val solutions: Array<Array<String>> = arrayOf(
-    arrayOf("option2","option3","option1","option2")
+    arrayOf("At any age as long as it is joint with a parent's account",
+        "Handmade gift",
+        "Figurines",
+        "Immediately buying what catches your eye"),
+    arrayOf("A way to spend money",
+        "A type of investment that represents ownership in a company",
+        "Because it can help you reach your financial goals in the future",
+        "It helps to reduce risk by spreading investments across multiple assets and sectors"),
+    arrayOf("Full-time job",
+        "All of the above",
+        "Depends with each country",
+        "Arts and crafts"),
+    arrayOf("Purchases when necessary, small or big",
+        "Daily coffee",
+        "Manage your budget and make a goal",
+        "The teacher wants to work on a new workbook"),
+    arrayOf("To borrow money and pay it back over time",
+        "The maximum amount of money you can borrow on your credit card",
+        "A fee charged if you don't make at least the minimum payment on your credit card by the due date",
+        "Withdrawing cash from an ATM using your credit card")
 )
 
 

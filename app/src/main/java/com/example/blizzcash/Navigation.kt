@@ -81,5 +81,8 @@ fun Navigation(navController: NavHostController){
         composable(route = Screen.Lens.route){
             LensScreen(navController = navController)
         }
+        composable(route = Screen.Settings.route){
+            SettingsScreen(navController = navController)
+        }
     }
 }

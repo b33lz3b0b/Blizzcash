@@ -33,6 +33,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import com.example.blizzcash.R
@@ -60,7 +61,12 @@ fun SignUpScreen(navController: NavHostController) {
         Column( modifier = Modifier
             .fillMaxHeight()
             .fillMaxWidth()
-            .background(color = MaterialTheme.colorScheme.background)
+            .background(brush = Brush.verticalGradient(
+                colors = listOf(
+                    MaterialTheme.colorScheme.errorContainer,
+                    MaterialTheme.colorScheme.background
+                )
+            ))
             .pointerInput(Unit) {
                 detectTapGestures(onTap = {
                     focusManager.clearFocus()

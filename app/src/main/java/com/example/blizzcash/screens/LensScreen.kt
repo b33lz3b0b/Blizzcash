@@ -158,8 +158,10 @@ fun LensScreen(navController: NavController) {
                             }
                         },
                         update = { view ->
-                            if (((pagerState.currentPage - page) + pagerState.currentPageOffsetFraction).absoluteValue > 0.5f)
+                            if(pagerState.currentPage != page)
                                 view.player?.stop()
+                            else
+                                view.player?.play()
                         }
                     )
 

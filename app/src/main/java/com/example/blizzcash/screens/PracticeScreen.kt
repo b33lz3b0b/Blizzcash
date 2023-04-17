@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -34,16 +35,16 @@ import com.google.firebase.ktx.Firebase
 
 data class LevelInfo(val name:String, val desc:String, var highscore:Int, var unlocked:Boolean)
 var levelListAllowance = mutableListOf<LevelInfo>(
-    LevelInfo("Level 1", "Desc1",0, false),
-    LevelInfo("Level 2", "Desc2",0, false),
-    LevelInfo("Level 3", "Desc3",0, false),
-    LevelInfo("Level 4", "Desc4",0, false),
-    LevelInfo("Level 5", "Desc5",0, false),
-    LevelInfo("Level 6", "Desc6",0, false),
+    LevelInfo("Level 1", "Saving money as a teenager",0, false),
+    LevelInfo("Level 2", "Investing as a teenager",0, false),
+    LevelInfo("Level 3", "Earning money as a teenager",0, false),
+    LevelInfo("Level 4", "Why do teenagers waste money",0, false),
+    LevelInfo("Level 5", "Credit card",0, false),
+    /*LevelInfo("Level 6", "Desc6",0, false),
     LevelInfo("Level 7", "Desc7",0, false),
     LevelInfo("Level 8", "Desc8",0, false),
     LevelInfo("Level 9","Desc9",0, false),
-    LevelInfo("Level 10", "Desc10",0, false)
+    LevelInfo("Level 10", "Desc10",0, false)*/
 )
 
 var levelListSalary = mutableListOf<LevelInfo>(
@@ -86,7 +87,7 @@ fun PracticeScreen(navController: NavController){
         Column(modifier= Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(MaterialTheme.colorScheme.background)) {
+            .background(MaterialTheme.colorScheme.errorContainer)) {
             Box(modifier = Modifier.fillMaxWidth()) {
                 IconButton(
                     onClick = { navController.navigate(route = Screen.Home.route) },
@@ -105,7 +106,7 @@ fun PracticeScreen(navController: NavController){
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .background(MaterialTheme.colorScheme.background)
+                    .background(MaterialTheme.colorScheme.errorContainer)
                     .fillMaxSize()
             ) {
                 if (coursetype == "Allowance")
@@ -117,6 +118,14 @@ fun PracticeScreen(navController: NavController){
                         CustomItem(navController,model = model, contxt, index)
                     }
             }
+            Text(
+                text = "More material soon to be added",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier
+                    .alpha(0.5f)
+                    .padding(5.dp)
+            )
         }
     }
 }
